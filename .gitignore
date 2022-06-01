@@ -1,0 +1,21 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# macros
+macros/*
+!macros/.gitkeep 
+
+# profiles
+profiles/*
+!profiles/profile1.yml
+
+# pycache
+xenon_driver/__pycache__/
+xenon_driver/gui_resources/__pycache__/
+tests/__pycache__/

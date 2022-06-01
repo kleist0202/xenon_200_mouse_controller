@@ -1,0 +1,209 @@
+bindings_data:
+  mode1:
+    back_button:
+      data:
+      - 0x14
+      - 0xf3
+      - 0x0
+      - 0x0
+      name: Back button
+    dpi_button:
+      data:
+      - 0x46
+      - 0x0
+      - 0x0
+      - 0x0
+      name: DPI Loop
+    fire_button:
+      data:
+      - 0x60
+      - 0x0
+      - 0xa0
+      - 0x0
+      name: Multimedia
+    forward_button:
+      data:
+      - 0x15
+      - 0xf4
+      - 0x0
+      - 0x0
+      name: Forward button
+    left_button:
+      data:
+      - 0x11
+      - 0xf0
+      - 0x0
+      - 0x0
+      name: Left button
+    middle_button:
+      data:
+      - 0x13
+      - 0xf2
+      - 0x0
+      - 0x0
+      name: Middle button
+    mode_button:
+      data:
+      - 0x60
+      - 0x0
+      - 0x6
+      - 0x7
+      name: Mode switch
+    right_button:
+      data:
+      - 0x12
+      - 0xf1
+      - 0x0
+      - 0x0
+      name: Right button
+  mode2:
+    back_button:
+      data:
+      - 0x14
+      - 0xf3
+      - 0x0
+      - 0x0
+      name: Back button
+    dpi_button:
+      data:
+      - 0x46
+      - 0x0
+      - 0x0
+      - 0x0
+      name: DPI Loop
+    fire_button:
+      data:
+      - 0x60
+      - 0x0
+      - 0x1d
+      - 0x1b
+      name: Keys combination
+    forward_button:
+      data:
+      - 0x15
+      - 0xf4
+      - 0x0
+      - 0x0
+      name: Forward button
+    left_button:
+      data:
+      - 0x11
+      - 0xf0
+      - 0x0
+      - 0x0
+      name: Left button
+    middle_button:
+      data:
+      - 0x13
+      - 0xf2
+      - 0x0
+      - 0x0
+      name: Middle button
+    mode_button:
+      data:
+      - 0x58
+      - 0x6
+      - 0x0
+      - 0x0
+      name: Mode switch
+    right_button:
+      data:
+      - 0x12
+      - 0xf1
+      - 0x0
+      - 0x0
+      name: Middle button
+  mode3:
+    back_button:
+      data:
+      - 0x74
+      - 0x1
+      - 0x0
+      - 0x0
+      name: Next
+    dpi_button:
+      data:
+      - 0x46
+      - 0x0
+      - 0x0
+      - 0x0
+      name: DPI Loop
+    fire_button:
+      data:
+      - 0x77
+      - 0x8
+      - 0x0
+      - 0x0
+      name: Play/Pause
+    forward_button:
+      data:
+      - 0x75
+      - 0x2
+      - 0x0
+      - 0x0
+      name: Previous
+    left_button:
+      data:
+      - 0x11
+      - 0xf0
+      - 0x0
+      - 0x0
+      name: Left button
+    middle_button:
+      data:
+      - 0x13
+      - 0xf2
+      - 0x0
+      - 0x0
+      name: Middle button
+    mode_button:
+      data:
+      - 0x58
+      - 0x6
+      - 0x0
+      - 0x0
+      name: Mode switch
+    right_button:
+      data:
+      - 0x12
+      - 0xf1
+      - 0x0
+      - 0x0
+      name: Right button
+main_data:
+  breath:
+    color:
+    - 0xff
+    - 0x0
+    - 0x4
+    option: 0x11
+    value: 0x22
+  chosen: Steady
+  dirn: 0x0
+  dpis:
+  - 0x3
+  - 0x5
+  - 0x8
+  - 0xb
+  neon:
+    color:
+    - 0x0
+    - 0x0
+    - 0x0
+    option: 0x51
+    value: 0x14
+  'off':
+    color:
+    - 0x0
+    - 0x0
+    - 0x0
+    option: null
+    value: 0x0
+  rr: 0x30
+  steady:
+    color:
+    - 0x0
+    - 0xd
+    - 0xff
+    option: 0xa1
+    value: 0x18
