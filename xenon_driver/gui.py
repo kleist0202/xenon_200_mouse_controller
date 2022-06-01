@@ -16,26 +16,6 @@ from xenon_driver.gui_resources import custom_widgets
 from xenon_driver.gui_resources import gui_parts
 
 
-# logging.basicConfig(level=logging.INFO, filename="log.log", filemode="w",
-#         format="%(asctime)s - %(levelname)s - %(message)s")
-#
-# logger = logging.getLogger(__name__)
-
-# adding custom level
-# logging.VERBOSE = 5
-# logging._levelToName.update({
-#     5: 'VERBOSE', 
-#     'VERBOSE': 5,
-# })
-
-# method for custom level
-def verbose(self, msg, *args, **kwargs):
-    if self.isEnabledFor(logging.VERBOSE):
-        self._log(logging.VERBOSE, msg, args, **kwargs)
-
-# logging.Logger.verbose = verbose
-
-
 dictConfig({
     'version': 1,
     'disable_existing_loggers': False,
@@ -317,17 +297,6 @@ class Window(QtWidgets.QWidget):
             bindings_list_layout.addWidget(label, i, 0)
             bindings_list_layout.addWidget(buttons_menu, i, 1)
             self.bindings_menus.append(buttons_menu)
-            # cb_bb = custom_widgets.ComboBox()
-            # start_mode = "mode1"
-            # cb_bb.add_item(self.current_binding_keys_data[start_mode][name]["name"])
-            # for opt in self.bindings_options:
-            #     cb_bb.add_item(opt)
-            # cb_func = partial(self.on_special_combo_box_item, i)
-            # cb_bb.new_signal.connect(cb_func)
-            # label = custom_widgets.Label(str(i+1)+".", width=10)
-            # bindings_list_layout.addWidget(label, i, 0)
-            # bindings_list_layout.addWidget(cb_bb, i, 1)
-            # self.cb_bindings_list.append(cb_bb)
 
         hspacer = QtWidgets.QSpacerItem(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         bindings_list_layout.addItem(hspacer, 10, 1)

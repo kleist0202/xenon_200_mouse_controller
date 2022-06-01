@@ -1,6 +1,3 @@
-# from aenum import NamedConstant
-
-
 class Options:
 
     STEADY = 0x18
