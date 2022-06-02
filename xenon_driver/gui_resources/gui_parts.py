@@ -565,29 +565,16 @@ class FireKeyMenu(custom_widgets.PopUpWindow):
 
 
 class MultimediaKeysSelector(custom_widgets.PopUpWindow):
-    ok_pressed = QtCore.pyqtSignal(int)
+    ok_pressed = QtCore.pyqtSignal(str)
     cancel_pressed = QtCore.pyqtSignal()
 
-    def __init__(self, parent, size_w, size_h, key_num, previous):
+    def __init__(self, parent, size_w, size_h, multimedia_keys_dict, key_num, previous):
         super().__init__(parent, size_w, size_h)
 
         multimedia_keys_layout = QVBoxLayout(self.outer_frame)
         buttons_layout = QHBoxLayout()
 
-        self.multimedia_keys_dict = {
-            "Media Player" : Options.MEDIAPLAYER,
-            "Play/Pause"   : Options.PLAYPAUSE,
-            "Next"         : Options.NEXT,
-            "Previous"     : Options.PREVIOUS,
-            "Stop"         : Options.STOP,
-            "Mute"         : Options.MUTE,
-            "Volume Up"    : Options.VOLUMEUP,
-            "Volume Down"  : Options.VOLUMEDOWN,
-            # "Email"        : Options.EMAIL,
-            "Calculator"   : Options.CALCULATOR,
-            # "Explorer"     : Options.EXPLORER,
-            "Home page"    : Options.HOMEPAGE
-        }
+        self.multimedia_keys_dict = multimedia_keys_dict
 
         self.key_num = key_num
         self.previous = previous 
@@ -613,8 +600,8 @@ class MultimediaKeysSelector(custom_widgets.PopUpWindow):
 
     def ok_button_preseed(self):
         chosen_name = self.list_widget.currentItem().text()
-        chosen_key = self.multimedia_keys_dict[chosen_name]
-        self.ok_pressed.emit(chosen_key)
+        # chosen_key = self.multimedia_keys_dict[chosen_name]
+        self.ok_pressed.emit(chosen_name)
         self.close()
         
     def cancel_button_pressed(self):

@@ -226,6 +226,21 @@ class Window(QtWidgets.QWidget):
             ]
         }
 
+        self.multimedia_keys_dict = {
+            "Media Player" : Options.MEDIAPLAYER,
+            "Play/Pause"   : Options.PLAYPAUSE,
+            "Next"         : Options.NEXT,
+            "Previous"     : Options.PREVIOUS,
+            "Stop"         : Options.STOP,
+            "Mute"         : Options.MUTE,
+            "Volume Up"    : Options.VOLUMEUP,
+            "Volume Down"  : Options.VOLUMEDOWN,
+            # "Email"        : Options.EMAIL,
+            "Calculator"   : Options.CALCULATOR,
+            # "Explorer"     : Options.EXPLORER,
+            "Home page"    : Options.HOMEPAGE
+        }
+
         self.led_changer = gui_parts.LedChanger(self.led_mode_data, self.current_led_mode)
 
         # self.right_frame_layout.addLayout(self.rr_layout)
@@ -430,11 +445,10 @@ class Window(QtWidgets.QWidget):
                 setter = partial(self.bindings_functions[i], *whole_key_combination_data, mode=self.current_set_mode)
                 setter()
             elif bind_text.startswith("Multimedia"):
-                current_mode = "mode"+str(self.current_set_mode)
-                current_num = self.bindings_buttons_names[i]
-                whole_multimedia_data = self.current_binding_keys_data[current_mode][current_num]["data"]
-                self.data.settings_yml["bindings_data"][current_mode][current_num]["data"] = whole_multimedia_data
-                setter = partial(self.bindings_functions[i], *whole_multimedia_data, mode=self.current_set_mode)
+                bind_text_splitted = bind_text.split(" ")
+                multimedia_name = bind_text_splitted[2]
+                multimedia_value = self.multimedia_keys_dict[multimedia_name]
+                setter = partial(self.bindings_functions[i], Options.KEY_COMBINATION_MASK, 0x00, multimedia_value, mode=self.current_set_mode)
                 setter()
             elif bind_text.startswith("Fire key"):
                 current_mode = "mode"+str(self.current_set_mode)
@@ -566,7 +580,7 @@ class Window(QtWidgets.QWidget):
             self.fire_key_menu.cancel_pressed.connect(self.on_cancel_button_pressed)
             self.fire_key_menu.show()
         elif text == "Multimedia":
-            self.multimedia_selector = gui_parts.MultimediaKeysSelector(self, 200, 300, i, last_selected) 
+            self.multimedia_selector = gui_parts.MultimediaKeysSelector(self, 200, 300, self.multimedia_keys_dict, i, last_selected) 
             self.multimedia_selector.setWindowModality(Qt.ApplicationModal)
             self.multimedia_selector.ok_pressed.connect(self.on_multimedia_ok_button_pressed)
             self.multimedia_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
@@ -608,18 +622,9 @@ class Window(QtWidgets.QWidget):
                 keys_catched[2]
         ]
 
-    def on_multimedia_ok_button_pressed(self, multimedia_key):
+    def on_multimedia_ok_button_pressed(self, multimedia_name):
         multimedia_selector = self.sender()
-
-        current_mode = "mode"+str(self.current_set_mode)
-        current_num = self.bindings_buttons_names[multimedia_selector.key_num]
-
-        self.current_binding_keys_data[current_mode][current_num]["data"] = [ 
-                Options.KEY_COMBINATION_MASK,
-                0x00, 
-                multimedia_key,
-                0x00
-        ]
+        self.bindings_menus[multimedia_selector.key_num].set_text(f"Multimedia - {multimedia_name}")
 
     def on_cancel_button_pressed(self):
         some_pop_up_window = self.sender()
