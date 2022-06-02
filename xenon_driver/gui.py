@@ -464,10 +464,22 @@ class Window(QtWidgets.QWidget):
                 setter = partial(self.bindings_functions[i], Options.KEY_COMBINATION_MASK, 0x00, multimedia_value, mode=self.current_set_mode)
                 setter()
             elif bind_text.startswith("Fire key"):
-                current_mode = "mode"+str(self.current_set_mode)
-                current_num = self.bindings_buttons_names[i]
-                whole_fire_key = self.current_binding_keys_data[current_mode][current_num]["data"]
-                self.data.settings_yml["bindings_data"][current_mode][current_num]["data"] = whole_fire_key
+                bind_text_splitted = bind_text.split("-")
+                fire_data = bind_text_splitted[1][1:]
+                splitted_fire_data = fire_data.split(",")
+
+                whole_fire_key = [Options.FIRE_MASK, 0, 0, 0]
+
+                if splitted_fire_data[0] in gui_keys.GuiKeys.MOUSE_KEYS:
+                    whole_fire_key[1] = gui_keys.GuiKeys.MOUSE_KEYS[splitted_fire_data[0]]
+
+                for _, tuple_val in gui_keys.GuiKeys.keys_dict.items():
+                    if splitted_fire_data[0] == tuple_val[0]:
+                        whole_fire_key[1] = tuple_val[1]
+
+                whole_fire_key[2] = int(splitted_fire_data[1][:-2])
+                whole_fire_key[3] = int(splitted_fire_data[2])
+
                 setter = partial(self.bindings_functions[i], *whole_fire_key, mode=self.current_set_mode)
                 setter()
             elif bind_text.startswith("Mode switch"):
@@ -642,18 +654,9 @@ class Window(QtWidgets.QWidget):
         some_pop_up_window = self.sender()
         self.bindings_menus[some_pop_up_window.key_num].set_text(f"Macro - {file_name}")
 
-    def on_fire_key_applied(self):
+    def on_fire_key_applied(self, key, delay, times):
         fire_key_button = self.sender()
-
-        current_mode = "mode"+str(self.current_set_mode)
-        current_num = self.bindings_buttons_names[fire_key_button.key_num]
-
-        self.current_binding_keys_data[current_mode][current_num]["data"] = [
-                Options.FIRE_MASK,
-                fire_key_button.current_button,
-                fire_key_button.current_delay,
-                fire_key_button.current_times
-        ]
+        self.bindings_menus[fire_key_button.key_num].set_text(f"Fire key - {key},{delay}ms,{times}")
 
     def kill_em_all(self):
         if self.key_catcher is not None:

@@ -455,7 +455,7 @@ class KeyCatcher(custom_widgets.PopUpWindow):
 
 
 class FireKeyMenu(custom_widgets.PopUpWindow):
-    ok_pressed = QtCore.pyqtSignal()
+    ok_pressed = QtCore.pyqtSignal(str, int, int)
     cancel_pressed = QtCore.pyqtSignal()
 
     def __init__(self, parent, key_num, previous):
@@ -523,7 +523,10 @@ class FireKeyMenu(custom_widgets.PopUpWindow):
         self.current_times = i
 
     def ok_button_preseed(self):
-        self.ok_pressed.emit()
+        key_text = self.action_menu_button.text()
+        delay = self.current_delay
+        times = self.current_times
+        self.ok_pressed.emit(key_text, delay, times)
         self.close()
         
     def cancel_button_pressed(self):
