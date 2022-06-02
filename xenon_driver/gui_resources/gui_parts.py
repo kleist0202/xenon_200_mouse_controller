@@ -355,7 +355,7 @@ class KeyCombinationCatcher(custom_widgets.PopUpWindow):
 
 
 class SnipeDpiSelector(custom_widgets.PopUpWindow):
-    ok_pressed = QtCore.pyqtSignal()
+    ok_pressed = QtCore.pyqtSignal(str)
     cancel_pressed = QtCore.pyqtSignal()
 
     def __init__(self, parent, dpi_values_dict, starting_value, key_num, previous):
@@ -371,14 +371,12 @@ class SnipeDpiSelector(custom_widgets.PopUpWindow):
         selector_layout = QHBoxLayout()
         buttons_layout = QHBoxLayout()
         
-        self.current_snipe_dpi_value = starting_value
-
         self.snipe_dpi_slider = custom_widgets.JumpSlider(QtCore.Qt.Horizontal)
 
         self.snipe_dpi_slider.setMinimum(1)
         self.snipe_dpi_slider.setMaximum(len(self.dpi_values_dict))
 
-        self.snipe_dpi_slider.setValue(starting_value)
+        self.snipe_dpi_slider.setValue(starting_value+1)
 
         self.snipe_dpi_slider.valueChanged.connect(self.on_slider_value_changed)
 
@@ -399,15 +397,13 @@ class SnipeDpiSelector(custom_widgets.PopUpWindow):
         snipe_dpi_selector_layout.addLayout(selector_layout)
         snipe_dpi_selector_layout.addLayout(buttons_layout)
 
-        
     def on_slider_value_changed(self):
-        for key in self.dpi_values_dict:
-            if key == self.snipe_dpi_slider.value():
-                self.current_snipe_dpi_value = key
-                self.dpi_label.setText(self.dpi_values_dict[key][0])
+        for i, dpi_value in enumerate(self.dpi_values_dict, start=1):
+            if i == self.snipe_dpi_slider.value():
+                self.dpi_label.setText(dpi_value[0])
 
     def ok_button_preseed(self):
-        self.ok_pressed.emit()
+        self.ok_pressed.emit(self.dpi_label.text())
         self.close()
 
     def cancel_button_pressed(self):

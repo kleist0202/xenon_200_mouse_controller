@@ -120,19 +120,32 @@ class Window(QtWidgets.QWidget):
         self.top_buttons_names = ["Create macro", "Profiles", "Advanced"]
         self.bindings_buttons_names = ["left_button", "right_button", "middle_button", "forward_button", "back_button", "dpi_button", "mode_button", "fire_button"]
 
-        self.snipe_dpis_dict = { 
-                1  : ["500", Options.SNIPE_DPI500],
-                2  : ["750", Options.SNIPE_DPI750],
-                3  : ["1000", Options.SNIPE_DPI1000],
-                4  : ["1250", Options.SNIPE_DPI1250],
-                5  : ["1375", Options.SNIPE_DPI1375],
-                6  : ["1500", Options.SNIPE_DPI1500],
-                7  : ["1750", Options.SNIPE_DPI1750],
-                8  : ["2000", Options.SNIPE_DPI2000],
-                9  : ["2500", Options.SNIPE_DPI2500],
-                10 : ["2750", Options.SNIPE_DPI2750],
-                11 : ["3200", Options.SNIPE_DPI3200]
-        }
+        # self.snipe_dpis_dict = { 
+        #         1  : ["500", Options.SNIPE_DPI500],
+        #         2  : ["750", Options.SNIPE_DPI750],
+        #         3  : ["1000", Options.SNIPE_DPI1000],
+        #         4  : ["1250", Options.SNIPE_DPI1250],
+        #         5  : ["1375", Options.SNIPE_DPI1375],
+        #         6  : ["1500", Options.SNIPE_DPI1500],
+        #         7  : ["1750", Options.SNIPE_DPI1750],
+        #         8  : ["2000", Options.SNIPE_DPI2000],
+        #         9  : ["2500", Options.SNIPE_DPI2500],
+        #         10 : ["2750", Options.SNIPE_DPI2750],
+        #         11 : ["3200", Options.SNIPE_DPI3200]
+        # }
+        self.snipe_dpis_dict = [ 
+                ("500" , Options.SNIPE_DPI500 ),
+                ("750" , Options.SNIPE_DPI750 ),
+                ("1000", Options.SNIPE_DPI1000),
+                ("1250", Options.SNIPE_DPI1250),
+                ("1375", Options.SNIPE_DPI1375),
+                ("1500", Options.SNIPE_DPI1500),
+                ("1750", Options.SNIPE_DPI1750),
+                ("2000", Options.SNIPE_DPI2000),
+                ("2500", Options.SNIPE_DPI2500),
+                ("2750", Options.SNIPE_DPI2750),
+                ("3200", Options.SNIPE_DPI3200)
+        ]
 
         # ---- modes radio buttons ----
         self.modes_layout = self.create_modes_buttons()
@@ -434,11 +447,13 @@ class Window(QtWidgets.QWidget):
                 setter = partial(self.bindings_functions[i], Options.MODE_MASK, Options.MODE_ACTION, mode=self.current_set_mode)
                 setter()
             elif bind_text.startswith("Snipe button"):
-                current_mode = "mode"+str(self.current_set_mode)
-                current_num = self.bindings_buttons_names[i]
-                whole_snipe_data = self.current_binding_keys_data[current_mode][current_num]["data"]        
-                self.data.settings_yml["bindings_data"][current_mode][current_num]["data"] = whole_snipe_data
-                setter = partial(self.bindings_functions[i], *whole_snipe_data, mode=self.current_set_mode)
+                snipe_dpi_text = bind_text.split(" ")
+                current_dpi_text = snipe_dpi_text[3]
+                actual_dpi_byte = 0
+                for dpi_value in self.snipe_dpis_dict:
+                    if dpi_value[0] == current_dpi_text:
+                        actual_dpi_byte = dpi_value[1]
+                setter = partial(self.bindings_functions[i], Options.SNIPE_BUTTON_MASK, actual_dpi_byte, mode=self.current_set_mode)
                 setter()
             elif bind_text.startswith("Macro"):
                 bind_text_splitted = bind_text.split(" ")
@@ -539,7 +554,7 @@ class Window(QtWidgets.QWidget):
             self.key_catcher.cancel_pressed.connect(self.on_cancel_button_pressed)
             self.key_catcher.show()
         elif text == "Snipe button":
-            self.snipe_dpi_selector = gui_parts.SnipeDpiSelector(self, self.snipe_dpis_dict, 1, i, last_selected) 
+            self.snipe_dpi_selector = gui_parts.SnipeDpiSelector(self, self.snipe_dpis_dict, 0, i, last_selected) 
             self.snipe_dpi_selector.setWindowModality(Qt.ApplicationModal)
             self.snipe_dpi_selector.ok_pressed.connect(self.on_snipe_dpi_applied)
             self.snipe_dpi_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
@@ -610,18 +625,9 @@ class Window(QtWidgets.QWidget):
         some_pop_up_window = self.sender()
         self.bindings_menus[some_pop_up_window.key_num].set_text(some_pop_up_window.previous)
 
-    def on_snipe_dpi_applied(self):
+    def on_snipe_dpi_applied(self, dpi_value):
         snipe_button = self.sender()
-
-        current_mode = "mode"+str(self.current_set_mode)
-        current_num = self.bindings_buttons_names[snipe_button.key_num]
-
-        self.current_binding_keys_data[current_mode][current_num]["data"] = [
-                Options.SNIPE_BUTTON_MASK,
-                self.snipe_dpis_dict[snipe_button.current_snipe_dpi_value][1],
-                0x00,
-                0x00
-        ]
+        self.bindings_menus[snipe_button.key_num].set_text(f"Snipe button - {dpi_value}")
 
     def on_macro_button_pressed(self, file_name):
         some_pop_up_window = self.sender()
