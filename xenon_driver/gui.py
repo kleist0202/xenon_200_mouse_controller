@@ -14,6 +14,7 @@ from xenon_driver.options import Options
 from xenon_driver.configuration import DATA_DIR, PROFILES_DIR
 from xenon_driver.gui_resources import custom_widgets 
 from xenon_driver.gui_resources import gui_parts
+from xenon_driver.gui_resources import gui_keys
 
 
 dictConfig({
@@ -410,6 +411,7 @@ class Window(QtWidgets.QWidget):
         # bindings
         for i, bind_menu in enumerate(self.bindings_menus):
             bind_text = bind_menu.text()
+            print(bind_text)
             if bind_text.startswith("Left button"):
                 setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.LEFT_BUTTON, mode=self.current_set_mode)
                 setter()
@@ -438,10 +440,21 @@ class Window(QtWidgets.QWidget):
                 setter = partial(self.bindings_functions[i], Options.THREE_CLICK_MASK, Options.THREE_CLICK_ACTION, mode=self.current_set_mode)
                 setter()
             elif bind_text.startswith("Keys combination"):
-                current_mode = "mode"+str(self.current_set_mode)
-                current_num = self.bindings_buttons_names[i]
-                whole_key_combination_data = self.current_binding_keys_data[current_mode][current_num]["data"]
-                self.data.settings_yml["bindings_data"][current_mode][current_num]["data"] = whole_key_combination_data
+                key_comb_splited = bind_text.split(" ")
+                key_comb_text = key_comb_splited[3]
+                keys_list = key_comb_text.split("+")
+                logger.debug(keys_list)
+
+                modifiers_keys_mask = 0x00
+                whole_key_combination_data = [Options.KEY_COMBINATION_MASK, 0x00]
+                for key_catched in keys_list:
+                    for _, tuple_val in gui_keys.GuiKeys.keys_dict.items():
+                        if key_catched in ("Ctrl", "Shift", "Alt", "Super") and key_catched == tuple_val[0]:
+                            print(modifiers_keys_mask)
+                            whole_key_combination_data[1] |= tuple_val[1]
+                        elif key_catched == tuple_val[0]:
+                            whole_key_combination_data.append(tuple_val[1])
+
                 setter = partial(self.bindings_functions[i], *whole_key_combination_data, mode=self.current_set_mode)
                 setter()
             elif bind_text.startswith("Multimedia"):
@@ -611,16 +624,7 @@ class Window(QtWidgets.QWidget):
 
     def on_keys_applied(self, keys_catched):
         key_catcher = self.sender()
-
-        current_mode = "mode"+str(self.current_set_mode)
-        current_num = self.bindings_buttons_names[key_catcher.key_num]
-
-        self.current_binding_keys_data[current_mode][current_num]["data"] = [ 
-                Options.KEY_COMBINATION_MASK,
-                keys_catched[0], 
-                keys_catched[1],
-                keys_catched[2]
-        ]
+        self.bindings_menus[key_catcher.key_num].set_text(f"Keys combination - {keys_catched}")
 
     def on_multimedia_ok_button_pressed(self, multimedia_name):
         multimedia_selector = self.sender()

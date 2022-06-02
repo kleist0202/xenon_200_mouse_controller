@@ -270,7 +270,7 @@ class DpiSliders(QWidget):
 
 
 class KeyCombinationCatcher(custom_widgets.PopUpWindow):
-    ok_pressed = QtCore.pyqtSignal(list)
+    ok_pressed = QtCore.pyqtSignal(str)
     cancel_pressed = QtCore.pyqtSignal()
 
     def __init__(self, parent, key_num, previous):
@@ -332,20 +332,9 @@ class KeyCombinationCatcher(custom_widgets.PopUpWindow):
         self.keys_label.setText(catcher_text)
 
     def save_combination(self):
-        modifiers_keys_mask = 0x00
         if len(self.pressed_keys_list) != 0 or len(self.pressed_modifiers_list) != 0:
-            driver_key_values = [ self.keys_dict[k][1] for k in self.pressed_keys_list ]
-
-            for mkm in self.pressed_modifiers_list:
-                modifiers_keys_mask |= self.keys_dict[mkm][1]
-
-            if len(driver_key_values) == 0:
-                driver_key_values.append(0x00)
-
-            if len(driver_key_values) == 1:
-                driver_key_values.append(0x00)
-
-            self.ok_pressed.emit([modifiers_keys_mask, driver_key_values[0], driver_key_values[1]])
+            text = self.keys_label.text()
+            self.ok_pressed.emit(text)
 
             self.close()
 
