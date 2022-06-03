@@ -45,6 +45,28 @@ class TopButtons(QWidget):
             btn.clicked.connect(function)
 
 
+class BottomButtons(QWidget):
+    def __init__(self, bottom_buttons, current_profile):
+        super().__init__()
+
+        bottom_buttons_layout = QHBoxLayout()
+
+        self.profile_label = custom_widgets.Label("Profile: " + current_profile)
+        bottom_buttons_layout.addWidget(self.profile_label)
+        spacerItem = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        bottom_buttons_layout.addItem(spacerItem)
+
+        for (name, function) in bottom_buttons:
+            btn = custom_widgets.Button(name)
+            btn.clicked.connect(function)
+            bottom_buttons_layout.addWidget(btn)
+
+        self.setLayout(bottom_buttons_layout)
+
+    def set_profile_label_text(self, current_profile):
+        self.profile_label.setText("Profile: " + current_profile)
+
+
 class LedChanger(QWidget):
     def __init__(self, data, current_led_mode):
         """

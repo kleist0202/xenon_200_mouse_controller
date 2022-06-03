@@ -93,7 +93,7 @@ class Window(QtWidgets.QWidget):
         # -------------------
         self.setStyleSheet("background-color: #444444;")
 
-        self.setFixedSize(680, 560)
+        self.setFixedSize(680, 580)
         self.setWindowTitle("Driver")
 
         self.outer_frame_layout = QtWidgets.QVBoxLayout(self)
@@ -201,8 +201,12 @@ class Window(QtWidgets.QWidget):
             "Home page"    : Options.HOMEPAGE
         }
 
-        # ---- modes radio buttons ----
-        self.modes_layout = self.create_modes_buttons()
+        restore_func = partial(self.load_profile, "default_settings.yml", True)
+        self.bottom_buttons_list = [
+                ("Restore default", restore_func),
+                ("Apply", self.apply_changes),
+                ("Exit", self.kill_em_all)
+        ]
 
         # ---- top buttons ----
         self.top_buttons_list = [
@@ -210,6 +214,11 @@ class Window(QtWidgets.QWidget):
                 ("Profiles", self.on_profile_button_clicked),
                 ("Advanced", self.on_advanced_clicked)
         ]
+
+        # ---- modes radio buttons ----
+        self.modes_layout = self.create_modes_buttons()
+        
+        # top buttons
         self.top_buttons_widget = gui_parts.TopButtons(self.top_buttons_frame, self.top_buttons_list)
 
         # bindings buttons
@@ -226,7 +235,7 @@ class Window(QtWidgets.QWidget):
         self.dpi_sliders_widget = gui_parts.DpiSliders(self.current_set_dpis, self.dpis_list)
 
         # bottom buttons 
-        self.bottom_buttons_layout = self.create_bottom_buttons()
+        self.bottom_buttons_widget = gui_parts.BottomButtons(self.bottom_buttons_list, self.current_profile)
 
         # ---- setting frames ----
 
@@ -250,7 +259,7 @@ class Window(QtWidgets.QWidget):
         self.settings_h_layout.addWidget(self.right_frame)
 
         self.main_layout.addLayout(self.settings_h_layout)
-        self.main_layout.addLayout(self.bottom_buttons_layout)
+        self.main_layout.addWidget(self.bottom_buttons_widget)
 
         self.right_frame_layout.addWidget(self.dpi_sliders_widget)
 
@@ -302,29 +311,6 @@ class Window(QtWidgets.QWidget):
         bindings_list_layout.addItem(hspacer, 10, 1)
 
         return bindings_list_layout
-
-    def create_bottom_buttons(self):
-        bottom_buttons_layout = QtWidgets.QHBoxLayout()
-
-        apply_button = QtWidgets.QPushButton("Apply")
-        apply_button.clicked.connect(self.apply_changes)
-
-        exit_button = QtWidgets.QPushButton("Exit")
-        exit_button.clicked.connect(self.kill_em_all)
-
-        restore_button = QtWidgets.QPushButton("Restore default")
-        restore_func = partial(self.load_profile, "default_settings.yml", True)
-        restore_button.clicked.connect(restore_func)
-
-        self.profile_label = QtWidgets.QLabel("Profile: " + self.current_profile)
-        bottom_buttons_layout.addWidget(self.profile_label)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        bottom_buttons_layout.addItem(spacerItem)
-        bottom_buttons_layout.addWidget(restore_button, alignment=Qt.AlignBottom)
-        bottom_buttons_layout.addWidget(apply_button, alignment=Qt.AlignBottom)
-        bottom_buttons_layout.addWidget(exit_button, alignment=Qt.AlignBottom)
-
-        return bottom_buttons_layout
 
     def create_modes_buttons(self):
         modes_layout = QtWidgets.QHBoxLayout()
@@ -541,7 +527,7 @@ class Window(QtWidgets.QWidget):
                 self.data.settings_yml["main_data"]["dpis"][i] = dpi_slider.value() | Options.BLOCKED_DPI_LEVEL_MASK
 
         # set currrent profile label
-        self.profile_label.setText("Profile: " + self.current_profile)
+        self.bottom_buttons_widget.set_profile_label_text(self.current_profile)
 
         with open(PROFILES_DIR+file_name+".yml", "w") as f:
             yaml.dump(self.data.settings_yml, f)
@@ -705,7 +691,7 @@ class Window(QtWidgets.QWidget):
             self.current_profile = file_name
 
         # set currrent profile label
-        self.profile_label.setText("Profile: " + self.current_profile)
+        self.bottom_buttons_widget.set_profile_label_text(self.current_profile)
 
         self.assign_data_bytes()
 
