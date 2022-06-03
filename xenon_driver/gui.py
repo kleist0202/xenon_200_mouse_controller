@@ -81,13 +81,6 @@ class Window(QtWidgets.QWidget):
         self.current_breath_option = self.data.settings_yml["main_data"]["breath"]["option"]
         self.current_neon_option = self.data.settings_yml["main_data"]["neon"]["option"]
 
-        self.current_binding_keys_data = {}
-
-        bindings_data = self.data.settings_yml["bindings_data"]
-
-        for mode in bindings_data:
-            self.current_binding_keys_data[mode] = bindings_data[mode]
-
         # pop up windows
         self.advanced = None
         self.profiles_manager = None
@@ -318,7 +311,7 @@ class Window(QtWidgets.QWidget):
 
         for i, name in enumerate(self.bindings_buttons_names):
             start_mode = "mode1"
-            buttons_menu = custom_widgets.ButtonMenu(self.current_binding_keys_data[start_mode][name]["name"])
+            buttons_menu = custom_widgets.ButtonMenu(self.data.settings_yml["bindings_data"][start_mode][name]["name"])
             for opt in bindings_options:
                 buttons_menu.add_option(opt, i, opt[0])
 
@@ -382,15 +375,9 @@ class Window(QtWidgets.QWidget):
         radio_button = self.sender()
         current_mode = radio_button.mode
         self.current_set_mode = current_mode
-        if current_mode == 1:
-            for i, name in enumerate(self.bindings_buttons_names):
-                self.bindings_menus[i].set_text(self.current_binding_keys_data["mode1"][name]["name"])
-        elif current_mode == 2:
-            for i, name in enumerate(self.bindings_buttons_names):
-                self.bindings_menus[i].set_text(self.current_binding_keys_data["mode2"][name]["name"])
-        else:
-            for i, name in enumerate(self.bindings_buttons_names):
-                self.bindings_menus[i].set_text(self.current_binding_keys_data["mode3"][name]["name"])
+        mode = f"mode{current_mode}"
+        for i, name in enumerate(self.bindings_buttons_names):
+            self.bindings_menus[i].set_text(self.data.settings_yml["bindings_data"][mode][name]["name"])
 
     def apply_changes(self):
         if self.current_profile == "":
@@ -719,15 +706,11 @@ class Window(QtWidgets.QWidget):
         self.led_changer.set_options(options_list)
         self.led_changer.set_color(colors_list)
 
-        # load bindings
-        for mode in bindings_data:
-            self.current_binding_keys_data[mode] = bindings_data[mode]
-
         # current mode
         start_mode = "mode1"
 
         for i, name in enumerate(self.bindings_buttons_names):
-            self.bindings_menus[i].set_text(self.current_binding_keys_data[start_mode][name]["name"])
+            self.bindings_menus[i].set_text(bindings_data[start_mode][name]["name"])
 
         # load report rate
         rr = main_data["rr"]
