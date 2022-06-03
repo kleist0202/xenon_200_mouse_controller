@@ -32,6 +32,19 @@ from xenon_driver.gui_resources import gui_keys
 from xenon_driver.options import Options
 
 
+class TopButtons(QWidget):
+    def __init__(self, frame, top_buttons):
+        super().__init__()
+
+        buttons_h_layout = QHBoxLayout(frame)
+
+        for (name, function) in top_buttons:
+            btn = custom_widgets.Button(name)
+            buttons_h_layout.addWidget(btn)
+
+            btn.clicked.connect(function)
+
+
 class LedChanger(QWidget):
     def __init__(self, data, current_led_mode):
         """

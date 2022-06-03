@@ -101,7 +101,7 @@ class Window(QtWidgets.QWidget):
         # ----- frames ------
         self.outer_frame = custom_widgets.Frame(parent=self, color="gray", style=QtWidgets.QFrame.StyledPanel|QtWidgets.QFrame.Sunken)
 
-        self.buttons_frame = custom_widgets.Frame(parent=self, color="gray", style=QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken, height=50)
+        self.top_buttons_frame = custom_widgets.Frame(parent=self, color="gray", style=QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken, height=50)
 
         self.bindings_frame = custom_widgets.Frame(self, "gray", QtWidgets.QFrame.Box | QtWidgets.QFrame.Sunken)
 
@@ -205,7 +205,12 @@ class Window(QtWidgets.QWidget):
         self.modes_layout = self.create_modes_buttons()
 
         # ---- top buttons ----
-        self.top_buttons_h_layout = self.create_top_buttons(self.buttons_frame, self.top_buttons_names)
+        self.top_buttons_list = [
+                ("Create macro", self.on_create_macro_clicked),
+                ("Profiles", self.on_profile_button_clicked),
+                ("Advanced", self.on_advanced_clicked)
+        ]
+        self.top_buttons_widget = gui_parts.TopButtons(self.top_buttons_frame, self.top_buttons_list)
 
         # bindings buttons
         self.bindings_menus = []
@@ -238,7 +243,7 @@ class Window(QtWidgets.QWidget):
         self.right_frame_layout.addWidget(self.led_changer)
 
         self.main_layout = QtWidgets.QVBoxLayout(self.outer_frame)
-        self.main_layout.addWidget(self.buttons_frame)
+        self.main_layout.addWidget(self.top_buttons_frame)
 
         self.settings_h_layout = QtWidgets.QHBoxLayout()
         self.settings_h_layout.addWidget(self.bindings_frame)
@@ -259,21 +264,6 @@ class Window(QtWidgets.QWidget):
         cp = QtWidgets.QDesktopWidget().availableGeometry().center()
         qt.moveCenter(cp)
         self.move(qt.topLeft())
-
-    def create_top_buttons(self, frame, names_list):
-        buttons_h_layout = QtWidgets.QHBoxLayout(frame)
-
-        for name in names_list:
-            btn = QtWidgets.QPushButton(name)
-            buttons_h_layout.addWidget(btn)
-            if name == "Profiles":
-                btn.clicked.connect(self.on_profile_button_clicked)
-            elif name == "Create macro":
-                btn.clicked.connect(self.on_create_macro_clicked)
-            elif name == "Advanced":
-                btn.clicked.connect(self.on_advanced_clicked)
-
-        return buttons_h_layout
 
     def create_bindings_buttons(self):
         bindings_list_layout = QtWidgets.QGridLayout()
