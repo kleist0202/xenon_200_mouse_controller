@@ -108,25 +108,9 @@ class Window(QtWidgets.QWidget):
         self.right_frame = custom_widgets.Frame(self, "gray", QtWidgets.QFrame.Box | QtWidgets.QFrame.Sunken)
         # -------------------
 
-        self.outer_frame_layout.addWidget(self.outer_frame)
-
         # button names lists
         self.top_buttons_names = ["Create macro", "Profiles", "Advanced"]
-        self.bindings_buttons_names = ["left_button", "right_button", "middle_button", "forward_button", "back_button", "dpi_button", "mode_button", "fire_button"]
 
-        # self.snipe_dpis_dict = { 
-        #         1  : ["500", Options.SNIPE_DPI500],
-        #         2  : ["750", Options.SNIPE_DPI750],
-        #         3  : ["1000", Options.SNIPE_DPI1000],
-        #         4  : ["1250", Options.SNIPE_DPI1250],
-        #         5  : ["1375", Options.SNIPE_DPI1375],
-        #         6  : ["1500", Options.SNIPE_DPI1500],
-        #         7  : ["1750", Options.SNIPE_DPI1750],
-        #         8  : ["2000", Options.SNIPE_DPI2000],
-        #         9  : ["2500", Options.SNIPE_DPI2500],
-        #         10 : ["2750", Options.SNIPE_DPI2750],
-        #         11 : ["3200", Options.SNIPE_DPI3200]
-        # }
         self.snipe_dpis_dict = [ 
                 ("500" , Options.SNIPE_DPI500 ),
                 ("750" , Options.SNIPE_DPI750 ),
@@ -141,14 +125,10 @@ class Window(QtWidgets.QWidget):
                 ("3200", Options.SNIPE_DPI3200)
         ]
 
-        # ---- modes radio buttons ----
-        self.modes_layout = self.create_modes_buttons()
-
-        # ---- top buttons ----
-        self.top_buttons_h_layout = self.create_top_buttons(self.buttons_frame, self.top_buttons_names)
-    
         # ---- bind buttons ----
         self.bindings_options = ["Left button", "Right button", "Middle button", "Forward button", "Back button", "DPI Loop", "DPI +", "DPI -", "Three click", "Multimedia", "Fire key", "Keys combination", "Macro", "Mode switch", "Snipe button", "Disable"]
+
+        self.bindings_buttons_names = ["left_button", "right_button", "middle_button", "forward_button", "back_button", "dpi_button", "mode_button", "fire_button"]
 
         self.bindings_functions = [
                 self.data_handler.set_left_button,
@@ -160,26 +140,13 @@ class Window(QtWidgets.QWidget):
                 self.data_handler.set_mode_button,
                 self.data_handler.set_fire_button
         ]
-        # self.cb_bindings_list = []
-        self.bindings_menus = []
-        self.bindings_list_layout = self.create_bindings_buttons()
 
-        # add bind layouts
-        self.bindings_v_layout = QtWidgets.QVBoxLayout(self.bindings_frame)
-        self.bindings_v_layout.addLayout(self.modes_layout)
-        self.bindings_v_layout.addLayout(self.bindings_list_layout)
-
-        # ---- right side ----
-        self.right_frame_layout = QtWidgets.QVBoxLayout(self.right_frame)
-
+        # report rate 
         self.rr_buttons_names = [
                 ("250",  Options.REPORT_RATE_250MHZ),
                 ("500",  Options.REPORT_RATE_500MHZ),
                 ("1000", Options.REPORT_RATE_1000MHZ)
         ]
-
-        self.rr_widget = gui_parts.ReportRateButtons(self.rr_buttons_names, self.current_set_rr)
-
         # led
         self.led_mode_data = {
             "Steady": [
@@ -220,6 +187,7 @@ class Window(QtWidgets.QWidget):
             ]
         }
 
+        # multimedia dict
         self.multimedia_keys_dict = {
             "Media Player" : Options.MEDIAPLAYER,
             "Play/Pause"   : Options.PLAYPAUSE,
@@ -229,23 +197,49 @@ class Window(QtWidgets.QWidget):
             "Mute"         : Options.MUTE,
             "Volume Up"    : Options.VOLUMEUP,
             "Volume Down"  : Options.VOLUMEDOWN,
-            # "Email"        : Options.EMAIL,
             "Calculator"   : Options.CALCULATOR,
-            # "Explorer"     : Options.EXPLORER,
             "Home page"    : Options.HOMEPAGE
         }
 
+        # dpi values
+        self.dpi_values = ["500", "750", "1000", "1250", "1375", "1500", "1750", "2000", "2500", "2750", "3200"]
+
+        # ---- modes radio buttons ----
+        self.modes_layout = self.create_modes_buttons()
+
+        # ---- top buttons ----
+        self.top_buttons_h_layout = self.create_top_buttons(self.buttons_frame, self.top_buttons_names)
+
+        # bindings buttons
+        self.bindings_menus = []
+        self.bindings_list_layout = self.create_bindings_buttons()
+
+        # report rate buttons
+        self.rr_widget = gui_parts.ReportRateButtons(self.rr_buttons_names, self.current_set_rr)
+
+        # led_changer
         self.led_changer = gui_parts.LedChanger(self.led_mode_data, self.current_led_mode)
 
-        # self.right_frame_layout.addLayout(self.rr_layout)
-        self.right_frame_layout.addWidget(self.rr_widget)
+        # dpi sliders
+        self.dpi_sliders_widget = gui_parts.DpiSliders(self.current_set_dpis, self.dpi_values)
 
-        self.right_frame_layout.addWidget(self.led_changer)
-
-        # ----  bottom buttons ----
+        # bottom buttons 
         self.bottom_buttons_layout = self.create_bottom_buttons()
 
         # ---- setting frames ----
+
+        self.outer_frame_layout.addWidget(self.outer_frame)
+
+        # add bind layouts
+        self.bindings_v_layout = QtWidgets.QVBoxLayout(self.bindings_frame)
+        self.bindings_v_layout.addLayout(self.modes_layout)
+        self.bindings_v_layout.addLayout(self.bindings_list_layout)
+
+        # right side 
+        self.right_frame_layout = QtWidgets.QVBoxLayout(self.right_frame)
+        self.right_frame_layout.addWidget(self.rr_widget)
+        self.right_frame_layout.addWidget(self.led_changer)
+
         self.main_layout = QtWidgets.QVBoxLayout(self.outer_frame)
         self.main_layout.addWidget(self.buttons_frame)
 
@@ -255,10 +249,6 @@ class Window(QtWidgets.QWidget):
 
         self.main_layout.addLayout(self.settings_h_layout)
         self.main_layout.addLayout(self.bottom_buttons_layout)
-
-        self.dpi_values = ["500", "750", "1000", "1250", "1375", "1500", "1750", "2000", "2500", "2750", "3200"]
-
-        self.dpi_sliders_widget = gui_parts.DpiSliders(self.current_set_dpis, self.dpi_values)
 
         self.right_frame_layout.addWidget(self.dpi_sliders_widget)
 
