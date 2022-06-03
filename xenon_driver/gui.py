@@ -111,7 +111,7 @@ class Window(QtWidgets.QWidget):
         # button names lists
         self.top_buttons_names = ["Create macro", "Profiles", "Advanced"]
 
-        self.snipe_dpis_dict = [ 
+        self.dpis_list = [ 
                 ("500" , Options.SNIPE_DPI500 ),
                 ("750" , Options.SNIPE_DPI750 ),
                 ("1000", Options.SNIPE_DPI1000),
@@ -201,9 +201,6 @@ class Window(QtWidgets.QWidget):
             "Home page"    : Options.HOMEPAGE
         }
 
-        # dpi values
-        self.dpi_values = ["500", "750", "1000", "1250", "1375", "1500", "1750", "2000", "2500", "2750", "3200"]
-
         # ---- modes radio buttons ----
         self.modes_layout = self.create_modes_buttons()
 
@@ -221,7 +218,7 @@ class Window(QtWidgets.QWidget):
         self.led_changer = gui_parts.LedChanger(self.led_mode_data, self.current_led_mode)
 
         # dpi sliders
-        self.dpi_sliders_widget = gui_parts.DpiSliders(self.current_set_dpis, self.dpi_values)
+        self.dpi_sliders_widget = gui_parts.DpiSliders(self.current_set_dpis, self.dpis_list)
 
         # bottom buttons 
         self.bottom_buttons_layout = self.create_bottom_buttons()
@@ -464,7 +461,7 @@ class Window(QtWidgets.QWidget):
                 snipe_dpi_text = bind_text.split(" ")
                 current_dpi_text = snipe_dpi_text[3]
                 actual_dpi_byte = 0
-                for dpi_value in self.snipe_dpis_dict:
+                for dpi_value in self.dpis_list:
                     if dpi_value[0] == current_dpi_text:
                         actual_dpi_byte = dpi_value[1]
                 setter = partial(self.bindings_functions[i], Options.SNIPE_BUTTON_MASK, actual_dpi_byte, mode=self.current_set_mode)
@@ -572,7 +569,7 @@ class Window(QtWidgets.QWidget):
             self.key_catcher.cancel_pressed.connect(self.on_cancel_button_pressed)
             self.key_catcher.show()
         elif text == "Snipe button":
-            self.snipe_dpi_selector = gui_parts.SnipeDpiSelector(self, self.snipe_dpis_dict, 0, i, last_selected) 
+            self.snipe_dpi_selector = gui_parts.SnipeDpiSelector(self, self.dpis_list, 0, i, last_selected) 
             self.snipe_dpi_selector.setWindowModality(Qt.ApplicationModal)
             self.snipe_dpi_selector.ok_pressed.connect(self.on_snipe_dpi_applied)
             self.snipe_dpi_selector.cancel_pressed.connect(self.on_cancel_button_pressed)

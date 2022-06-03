@@ -240,7 +240,7 @@ class DpiSliders(QWidget):
             if high_nibble != Options.BLOCKED_DPI_LEVEL_MASK:
                 dpi_check_box.setChecked(True)
 
-            current_dpi_label = custom_widgets.Label(dpi_values[low_nibble-1])
+            current_dpi_label = custom_widgets.Label(dpi_values[low_nibble-1][0])
 
             self.dpi_labels_list.append(current_dpi_label)
             self.dpi_sliders_list.append(dpi_slider)
@@ -255,7 +255,7 @@ class DpiSliders(QWidget):
 
     def on_slider_value_changed(self, num):
         current_dpi_slider = self.sender()
-        self.dpi_labels_list[num-1].setText(self.dpi_values[current_dpi_slider.value()-1])
+        self.dpi_labels_list[num-1].setText(self.dpi_values[current_dpi_slider.value()-1][0])
 
     def set_sliders_values(self, starting_values):
         for i in range(4):
