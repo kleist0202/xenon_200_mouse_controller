@@ -125,6 +125,7 @@ class Data:
         bindings_data[1134] = m3f8; bindings_data[1135] = m3a8; bindings_data[1136] = m3s8; bindings_data[1137] = m3t8
 
     def load_data(self, file_path):
+        print(file_path)
         try:
             with open(file_path, "r") as file:
                 default_settings = yaml.safe_load(file)

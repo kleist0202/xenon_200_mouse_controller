@@ -398,7 +398,6 @@ class Window(QtWidgets.QWidget):
         # bindings
         for i, bind_menu in enumerate(self.bindings_menus):
             bind_text = bind_menu.text()
-            print(bind_text)
             if bind_text.startswith("Left button"):
                 setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.LEFT_BUTTON, mode=self.current_set_mode)
                 setter()
@@ -432,12 +431,10 @@ class Window(QtWidgets.QWidget):
                 keys_list = key_comb_text.split("+")
                 logger.debug(keys_list)
 
-                modifiers_keys_mask = 0x00
                 whole_key_combination_data = [Options.KEY_COMBINATION_MASK, 0x00]
                 for key_catched in keys_list:
                     for _, tuple_val in gui_keys.GuiKeys.keys_dict.items():
                         if key_catched in ("Ctrl", "Shift", "Alt", "Super") and key_catched == tuple_val[0]:
-                            print(modifiers_keys_mask)
                             whole_key_combination_data[1] |= tuple_val[1]
                         elif key_catched == tuple_val[0]:
                             whole_key_combination_data.append(tuple_val[1])
@@ -678,15 +675,15 @@ class Window(QtWidgets.QWidget):
         if default:
             path = DATA_DIR+file_name
         else:
-            path = PROFILES_DIR+file_name
+            path = PROFILES_DIR+file_name+".yml"
 
         logging.info(f"loading {file_name}")
-        profile_settings = self.data.load_data(path+".yml")
+        self.data.settings_yml = self.data.load_data(path)
 
-        bindings_data = profile_settings["bindings_data"]
+        bindings_data = self.data.settings_yml["bindings_data"]
 
         # load led settings
-        main_data = profile_settings["main_data"]
+        main_data = self.data.settings_yml["main_data"]
 
         chosen_led_mode = main_data["chosen"]
         steady_option = main_data["steady"]["option"]
