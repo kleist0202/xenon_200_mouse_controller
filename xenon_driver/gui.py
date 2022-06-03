@@ -264,6 +264,7 @@ class Window(QtWidgets.QWidget):
 
         self.right_frame_layout.addStretch()
 
+        self.assign_data_bytes()
         self.center()
 
     def center(self):
@@ -379,7 +380,7 @@ class Window(QtWidgets.QWidget):
         for i, name in enumerate(self.bindings_buttons_names):
             self.bindings_menus[i].set_text(self.data.settings_yml["bindings_data"][mode][name]["name"])
 
-    def apply_changes(self):
+    def assign_data_bytes(self):
         if self.current_profile == "":
             custom_widgets.SaveProfileMessage()
             return
@@ -510,6 +511,9 @@ class Window(QtWidgets.QWidget):
         dpi_levels = sum([dcb.isChecked() for dcb in self.dpi_sliders_widget.dpi_check_boxes_list])
         self.data_handler.set_dpi_levels(dpi_levels)
 
+    def apply_changes(self):
+        self.assign_data_bytes()
+
         if self.dry_run:
             return
 
@@ -528,6 +532,7 @@ class Window(QtWidgets.QWidget):
         self.save_default(self.current_profile)
 
         self.save_data(self.current_profile)
+
 
     def save_data(self, file_name):
         self.current_profile = file_name
@@ -724,4 +729,6 @@ class Window(QtWidgets.QWidget):
 
         # set currrent profile label
         self.profile_label.setText("Profile: " + self.current_profile)
+
+        self.assign_data_bytes()
 
