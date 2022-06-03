@@ -95,10 +95,7 @@ class DataHandler:
                             break
                         self.bindings_data[index+1] = macro.macro_bytes[i]
                     action |= (nth+1 << 4)
-                    print(action)
-                    print(macro.macro_mode)
                     action += macro.macro_mode
-                    print(action)
 
                 func(self, mask, action, speed, times, mode, macro)
 

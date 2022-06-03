@@ -1,8 +1,10 @@
 from xenon_driver.configuration import DATA_DIR
-from .options import Options
 import yaml
 from pathlib import Path
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Data:
     def __init__(self, file_path=None):
@@ -30,17 +32,16 @@ class Data:
         return bytes_list
 
     def load_data(self, file_path):
-        print(file_path)
         try:
             with open(file_path, "r") as file:
                 default_settings = yaml.safe_load(file)
 
             file_name = Path(file_path).stem
             self.file_name = file_name
-            print(f"Data: name of current settings file: {file_name}")
+            logger.info(f"Data: name of current settings file: {file_name}")
 
         except FileNotFoundError:
-            print("Data: settings file not found: opening default settings")
+            logger.info("Data: settings file not found: opening default settings")
             with open(DATA_DIR+"default_settings.yml", "r") as file:
                 default_settings = yaml.safe_load(file)
             self.file_name = ""

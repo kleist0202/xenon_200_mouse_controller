@@ -22,13 +22,13 @@ class Driver:
         return self
 
     def __exit__(self, type, value, traceback):
-        logging.info("driver EXIT")
+        logger.info("driver EXIT")
         if type:
-            print(f"Driver: Logging exception {type, value, traceback}")
+            logger.debug(f"Driver: Logging exception {type, value, traceback}")
 
     def send_data(self, data):
         if self.dry_run:
-            print("Driver (dry run): data has not been sent")
+            logger.info("Driver (dry run): data has not been sent")
             return
 
         try:
@@ -36,9 +36,9 @@ class Driver:
         except usb.core.USBError:
             return
 
-        print("Driver: DETACHING KERNEL DRIVER")
+        logger.debug("Driver: DETACHING KERNEL DRIVER")
         usb.util.claim_interface(self.dev, self.interface)
-        print("Driver: CLAIMING INTERFACE")
+        logger.debug("Driver: CLAIMING INTERFACE")
 
         self.dev.set_interface_altsetting(interface=self.interface, alternate_setting=0)
 
@@ -69,12 +69,12 @@ class Driver:
                 timeout=1000
         )
         
-        print("Driver: DATA HAS BEEN SENT")
+        logger.info("Driver: DATA HAS BEEN SENT")
 
         usb.util.release_interface(self.dev, 1)
-        print("Driver: RELEASING INTERFACE")
+        logger.debug("Driver: RELEASING INTERFACE")
         self.dev.attach_kernel_driver(1)
-        print("Driver: ATTACHING KERNEL DRIVER")
+        logger.debug("Driver: ATTACHING KERNEL DRIVER")
 
         return 0
 

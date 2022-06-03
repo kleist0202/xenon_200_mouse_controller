@@ -1164,7 +1164,6 @@ class MacroCreator(custom_widgets.PopUpWindow):
         self.key_list_widget.clear()
 
         # if macro is empty, end this function
-        print(macro_text)
         if macro_text == "":
             return
 
