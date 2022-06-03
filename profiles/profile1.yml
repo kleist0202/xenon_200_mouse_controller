@@ -17,67 +17,10 @@ bindings_data:
     fire_button:
       data:
       - 0x60
-      - 0x0
-      - 0xa0
-      - 0x0
-      name: Multimedia
-    forward_button:
-      data:
-      - 0x15
-      - 0xf4
-      - 0x0
-      - 0x0
-      name: Forward button
-    left_button:
-      data:
-      - 0x11
-      - 0xf0
-      - 0x0
-      - 0x0
-      name: Left button
-    middle_button:
-      data:
-      - 0x13
-      - 0xf2
-      - 0x0
-      - 0x0
-      name: Middle button
-    mode_button:
-      data:
-      - 0x60
-      - 0x0
-      - 0x6
-      - 0x7
-      name: Mode switch
-    right_button:
-      data:
-      - 0x12
-      - 0xf1
-      - 0x0
-      - 0x0
-      name: Right button
-  mode2:
-    back_button:
-      data:
-      - 0x14
-      - 0xf3
-      - 0x0
-      - 0x0
-      name: Back button
-    dpi_button:
-      data:
-      - 0x46
-      - 0x0
-      - 0x0
-      - 0x0
-      name: DPI Loop
-    fire_button:
-      data:
-      - 0x60
-      - 0x0
-      - 0x1d
-      - 0x1b
-      name: Keys combination
+      - 0x2
+      - 0x4
+      - 0x5
+      name: Snipe button - 1250
     forward_button:
       data:
       - 0x15
@@ -105,6 +48,63 @@ bindings_data:
       - 0x6
       - 0x0
       - 0x0
+      name: Mode button
+    right_button:
+      data:
+      - 0x20
+      - 0x19
+      - 0x1e
+      - 0x5
+      name: Right button
+  mode2:
+    back_button:
+      data:
+      - 0x14
+      - 0xf3
+      - 0x0
+      - 0x0
+      name: Back button
+    dpi_button:
+      data:
+      - 0x60
+      - 0x0
+      - 0x10
+      - 0x11
+      name: Keys combination - A
+    fire_button:
+      data:
+      - 0x20
+      - 0x1b
+      - 0x1e
+      - 0x2
+      name: Fire key - Left button,30ms,1
+    forward_button:
+      data:
+      - 0x15
+      - 0xf4
+      - 0x0
+      - 0x0
+      name: Forward button
+    left_button:
+      data:
+      - 0x11
+      - 0xf0
+      - 0x0
+      - 0x0
+      name: Left button
+    middle_button:
+      data:
+      - 0x13
+      - 0xf2
+      - 0x0
+      - 0x0
+      name: Left button
+    mode_button:
+      data:
+      - 0x58
+      - 0x6
+      - 0x0
+      - 0x0
       name: Mode switch
     right_button:
       data:
@@ -112,7 +112,7 @@ bindings_data:
       - 0xf1
       - 0x0
       - 0x0
-      name: Middle button
+      name: Right button
   mode3:
     back_button:
       data:
@@ -120,7 +120,7 @@ bindings_data:
       - 0x1
       - 0x0
       - 0x0
-      name: Next
+      name: Back button
     dpi_button:
       data:
       - 0x46
@@ -130,18 +130,18 @@ bindings_data:
       name: DPI Loop
     fire_button:
       data:
-      - 0x77
-      - 0x8
+      - 0x60
       - 0x0
-      - 0x0
-      name: Play/Pause
+      - 0x20
+      - 0x1e
+      name: Keys combination - 1+2
     forward_button:
       data:
       - 0x75
       - 0x2
       - 0x0
       - 0x0
-      name: Previous
+      name: Forward button
     left_button:
       data:
       - 0x11
@@ -175,14 +175,14 @@ main_data:
     color:
     - 0xff
     - 0x0
-    - 0x4
-    option: 0x11
+    - 0x0
+    option: 0x51
     value: 0x22
   chosen: Steady
   dirn: 0x0
   dpis:
-  - 0x3
-  - 0x5
+  - 0x1
+  - 0x4
   - 0x8
   - 0xb
   neon:
@@ -198,12 +198,12 @@ main_data:
     - 0x0
     - 0x0
     option: null
-    value: 0x0
+    value: 0x11
   rr: 0x30
   steady:
     color:
     - 0x0
-    - 0xd
+    - 0x0
     - 0xff
-    option: 0xa1
+    option: 0x51
     value: 0x18
