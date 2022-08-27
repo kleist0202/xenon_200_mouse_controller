@@ -5,7 +5,7 @@ from functools import partial
 
 
 class Frame(QtWidgets.QFrame):
-    """ 
+    """
     Is is QFrame with arguments in constructor for setting color,
     style and fixed height
     """
@@ -20,7 +20,6 @@ class Frame(QtWidgets.QFrame):
             self.setFixedHeight(height)
 
 
-
 class PopUpWindow(QtWidgets.QWidget):
     """
     Base class for all pop up windows in gui
@@ -31,7 +30,7 @@ class PopUpWindow(QtWidgets.QWidget):
 
         self.setStyleSheet("background-color: #444444;")
         self.outer_frame_layout = QtWidgets.QVBoxLayout(self)
-        self.outer_frame = Frame(self, "gray", QtWidgets.QFrame.StyledPanel|QtWidgets.QFrame.Sunken)
+        self.outer_frame = Frame(self, "gray", QtWidgets.QFrame.StyledPanel | QtWidgets.QFrame.Sunken)
         self.outer_frame_layout.addWidget(self.outer_frame)
 
         self.setFixedSize(size_w, size_h)
@@ -46,7 +45,7 @@ class PopUpWindow(QtWidgets.QWidget):
 
 
 class ColorButton(QtWidgets.QPushButton):
-    """ 
+    """
     It is small QPushButton with solid color, mostly used to open QColorDialog
     """
     def __init__(self, color_r, color_g, color_b, text=None, parent=None):
@@ -67,7 +66,7 @@ class ColorButton(QtWidgets.QPushButton):
 
 
 class JumpSlider(QtWidgets.QSlider):
-    """ 
+    """
     It is QSlider with the feature of instant jumping to
     current pointer position
     """
@@ -86,8 +85,8 @@ class JumpSlider(QtWidgets.QSlider):
 
 
 class ComboBox(QtWidgets.QComboBox):
-    """ 
-    Is is QComboBox with some methods overriden methods in order to make 
+    """
+    Is is QComboBox with some methods overriden methods in order to make
     ComboBox remember previous selected item
     """
 
@@ -100,14 +99,14 @@ class ComboBox(QtWidgets.QComboBox):
         self.lastSelected = ""
         self.activated[str].connect(self.onActivated)
 
-        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed);
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
 
     def add_item(self, item):
         if self.item_counter < 1:
             self.lastSelected = item
         self.addItem(item)
         self.item_counter += 1
-    
+
     def set_current_text(self, text):
         self.setCurrentText(text)
         self.lastSelected = text
@@ -118,7 +117,7 @@ class ComboBox(QtWidgets.QComboBox):
 
 
 class RadioButton(QtWidgets.QRadioButton):
-    """ 
+    """
     Is is QRadioButton with some constructor that allows to set text color
     """
     def __init__(self, text, *, color="", bold="", parent=None):
@@ -128,7 +127,7 @@ class RadioButton(QtWidgets.QRadioButton):
 
 
 class Label(QtWidgets.QLabel):
-    """ 
+    """
     Is is QLabel with some constructor that allows to set label width and height
     """
     def __init__(self, text, *,  width=None, height=None, parent=None):
@@ -141,7 +140,7 @@ class Label(QtWidgets.QLabel):
 
 
 class Button(QtWidgets.QPushButton):
-    """ 
+    """
     Is is QPushButton with some constructor that allows to set button width and height etc.
     """
     def __init__(self, text, *,  width=None, height=None, func=None, parent=None):
@@ -157,7 +156,7 @@ class Button(QtWidgets.QPushButton):
 
 
 class SpinBox(QtWidgets.QSpinBox):
-    """ 
+    """
     Is is QSpinBox with some constructor that allows to set spin box minimum, maximum value etc.
     """
     def __init__(self, *,  width=None, height=None, minv=None, maxv=None, parent=None):
@@ -180,7 +179,7 @@ class SpinBox(QtWidgets.QSpinBox):
 
 
 class ButtonMenu(QtWidgets.QPushButton):
-    """ 
+    """
     Is is Button with drop down menu
     """
     def __init__(self, text, menu_items=None, *, parent=None):
@@ -235,7 +234,7 @@ class DataNotAllowed(QtWidgets.QMessageBox):
 
 class SaveProfileMessage(QtWidgets.QMessageBox):
     """
-    Just a message that informs about necessity of naming current profile 
+    Just a message that informs about necessity of naming current profile
     """
     def __init__(self):
         super().__init__()

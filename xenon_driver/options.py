@@ -201,11 +201,11 @@ class Options:
     MUTE = 0xa4
     VOLUMEUP = 0xa5
     VOLUMEDOWN = 0xa6
-    EMAIL = 0xa7 
+    EMAIL = 0xa7
     CALCULATOR = 0xa8
     EXPLORER = 0xa9
     HOMEPAGE = 0xaa
 
-    # macros 
+    # macros
     MACRO_MASK = 0x90
     MACRO_DELAY_LOOP = 0x03

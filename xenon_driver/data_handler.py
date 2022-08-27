@@ -32,7 +32,6 @@ class DataHandler:
             if mask is Options.CLICK_MASK:
                 speed = 0x00
                 times = 0x00
-            
                 if action not in self.basic_clicks and action not in [Options.BACK_BUTTON, Options.FORWARD_BUTTON]:
                     raise Exception(f"Wrong action for {mask}")
 
@@ -100,9 +99,9 @@ class DataHandler:
                 func(self, mask, action, speed, times, mode, macro)
 
             return wrapper
-        return inner 
+        return inner
 
-    def show_bytes(self):   
+    def show_bytes(self):
         logging.info("Showing Main")
         for i, b in enumerate(self.main_data):
             logging.info(f"{i}, {hex(b)}")
@@ -143,7 +142,7 @@ class DataHandler:
         r, g, b:
             0x00-0xff -> colors
         """
-        self.main_data[93] = mode 
+        self.main_data[93] = mode
         self.main_data[96] = option
         self.main_data[97] = r
         self.main_data[98] = g
@@ -154,7 +153,7 @@ class DataHandler:
         report_rate:
             Options.REPORT_RATE_250MHZ or
             Options.REPORT_RATE_500MHZ or
-            Options.REPORT_RATE_1000MHZ 
+            Options.REPORT_RATE_1000MHZ
         """
 
         if report_rate not in [Options.REPORT_RATE_250MHZ, Options.REPORT_RATE_500MHZ, Options.REPORT_RATE_1000MHZ]:
@@ -205,7 +204,7 @@ class DataHandler:
         if level < 0x00 or level > 0x04:
             raise Exception("No such option (dpi level)")
 
-        self.main_data[71] = level 
+        self.main_data[71] = level
 
     # @bindings_checker
     @macro_number(0)
@@ -220,7 +219,7 @@ class DataHandler:
             or
             Options.LCTRL/LSHIFT/LALT -> these keys
         speed:
-            5-255 -> for fire key 
+            5-255 -> for fire key
             or
             Options.KEY_*
         times:
@@ -261,7 +260,7 @@ class DataHandler:
             or
             Options.LCTRL/LSHIFT/LALT -> these keys
         speed:
-            5-255 -> for fire key 
+            5-255 -> for fire key
             or
             Options.KEY_*
         times:
@@ -299,7 +298,7 @@ class DataHandler:
             or
             Options.LCTRL/LSHIFT/LALT -> these keys
         speed:
-            5-255 -> for fire key 
+            5-255 -> for fire key
             or
             Options.KEY_*
         times:
@@ -337,7 +336,7 @@ class DataHandler:
             or
             Options.LCTRL/LSHIFT/LALT -> these keys
         speed:
-            5-255 -> for fire key 
+            5-255 -> for fire key
             or
             Options.KEY_*
         times:
@@ -375,7 +374,7 @@ class DataHandler:
             or
             Options.LCTRL/LSHIFT/LALT -> these keys
         speed:
-            5-255 -> for fire key 
+            5-255 -> for fire key
             or
             Options.KEY_*
         times:
@@ -413,7 +412,7 @@ class DataHandler:
             or
             Options.LCTRL/LSHIFT/LALT -> these keys
         speed:
-            5-255 -> for fire key 
+            5-255 -> for fire key
             or
             Options.KEY_*
         times:
@@ -489,7 +488,7 @@ class DataHandler:
             or
             Options.LCTRL/LSHIFT/LALT -> these keys
         speed:
-            5-255 -> for fire key 
+            5-255 -> for fire key
             or
             Options.KEY_*
         times:
@@ -533,7 +532,7 @@ class MacroTranslator:
             with open(MACROS_DIR+macro_file_name, 'r') as file:
                 macro_text = file.readline()
         except FileNotFoundError:
-            return 
+            return
 
         macro_full = macro_text.split(":")
         macro_prefix = macro_full[0]
@@ -586,7 +585,7 @@ class MacroTranslator:
                     rest = delay_value - hundreds*100
                     if rest == 0:
                         rest = 1
-                    self.macro_bytes[real_index-2] += rest-1 
+                    self.macro_bytes[real_index-2] += rest-1
                     if hundreds == 256:
                         hundreds = 0
                     self.macro_bytes.append(hundreds)
@@ -599,6 +598,3 @@ class MacroTranslator:
 
         logger.debug(f"{[hex(x) for x in self.macro_bytes]}")
         logger.debug(f"macro_bytes length: {len(self.macro_bytes)}")
-
-
-

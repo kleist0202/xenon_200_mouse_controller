@@ -12,7 +12,7 @@ from xenon_driver.data_handler import DataHandler, MacroTranslator
 from xenon_driver.options import Options
 
 from xenon_driver.configuration import DATA_DIR, PROFILES_DIR
-from xenon_driver.gui_resources import custom_widgets 
+from xenon_driver.gui_resources import custom_widgets
 from xenon_driver.gui_resources import gui_parts
 from xenon_driver.gui_resources import gui_keys
 
@@ -22,28 +22,28 @@ dictConfig({
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s - [%(levelname)s] %(name)s [%(module)s.%(funcName)s:%(lineno)d]: %(message)s', 
+            'format': '%(asctime)s - [%(levelname)s] %(name)s [%(module)s.%(funcName)s:%(lineno)d]: %(message)s',
             'datefmt': '%Y-%m-%d %H:%M:%S',
         }
     },
-   'handlers' : {
+    'handlers': {
         'default': {
-            'level': 'DEBUG', 
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'standard',
         }
-   }, 
-   'loggers': {
-        '__main__': { 
-            'handlers' : ['default'], 
-            'level': 'DEBUG', 
+    },
+    'loggers': {
+        '__main__': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
             'propagate': False,
         },
-   },
-   'root': {
+    },
+    'root': {
         'level': 'DEBUG',
         'handlers': ['default']
-   },
+    },
 })
 
 logger = logging.getLogger(__name__)
@@ -234,7 +234,7 @@ class Window(QtWidgets.QWidget):
         # dpi sliders
         self.dpi_sliders_widget = gui_parts.DpiSliders(self.current_set_dpis, self.dpis_list)
 
-        # bottom buttons 
+        # bottom buttons
         self.bottom_buttons_widget = gui_parts.BottomButtons(self.bottom_buttons_list, self.current_profile)
 
         # ---- setting frames ----
@@ -246,7 +246,7 @@ class Window(QtWidgets.QWidget):
         self.bindings_v_layout.addLayout(self.modes_layout)
         self.bindings_v_layout.addLayout(self.bindings_list_layout)
 
-        # right side 
+        # right side
         self.right_frame_layout = QtWidgets.QVBoxLayout(self.right_frame)
         self.right_frame_layout.addWidget(self.rr_widget)
         self.right_frame_layout.addWidget(self.led_changer)
@@ -290,8 +290,8 @@ class Window(QtWidgets.QWidget):
                 ("Multimedia", self.on_special_combo_box_item),
                 ("Fire key", self.on_special_combo_box_item),
                 ("Keys combination", self.on_special_combo_box_item),
-                ("Macro", self.on_special_combo_box_item), 
-                ("Mode switch", self.on_special_combo_box_item), 
+                ("Macro", self.on_special_combo_box_item),
+                ("Mode switch", self.on_special_combo_box_item),
                 ("Snipe button", self.on_special_combo_box_item),
                 ("Disable", self.on_special_combo_box_item)
         ]
@@ -514,7 +514,7 @@ class Window(QtWidgets.QWidget):
 
         # bindings
         for i, binding_menu in enumerate(self.bindings_menus):
-            self.data.settings_yml["bindings_data"]["mode"+str(self.current_set_mode)][self.bindings_buttons_names[i]]["name"] = binding_menu.text() 
+            self.data.settings_yml["bindings_data"]["mode"+str(self.current_set_mode)][self.bindings_buttons_names[i]]["name"] = binding_menu.text()
 
         # rr
         self.data.settings_yml["main_data"]["rr"] = int(self.rr_widget.current_set_rr)
@@ -545,7 +545,7 @@ class Window(QtWidgets.QWidget):
             self.key_catcher.cancel_pressed.connect(self.on_cancel_button_pressed)
             self.key_catcher.show()
         elif text == "Snipe button":
-            self.snipe_dpi_selector = gui_parts.SnipeDpiSelector(self, self.dpis_list, 0, i, last_selected) 
+            self.snipe_dpi_selector = gui_parts.SnipeDpiSelector(self, self.dpis_list, 0, i, last_selected)
             self.snipe_dpi_selector.setWindowModality(Qt.ApplicationModal)
             self.snipe_dpi_selector.ok_pressed.connect(self.on_snipe_dpi_applied)
             self.snipe_dpi_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
@@ -557,13 +557,13 @@ class Window(QtWidgets.QWidget):
             self.fire_key_menu.cancel_pressed.connect(self.on_cancel_button_pressed)
             self.fire_key_menu.show()
         elif text == "Multimedia":
-            self.multimedia_selector = gui_parts.MultimediaKeysSelector(self, 200, 300, self.multimedia_keys_dict, i, last_selected) 
+            self.multimedia_selector = gui_parts.MultimediaKeysSelector(self, 200, 300, self.multimedia_keys_dict, i, last_selected)
             self.multimedia_selector.setWindowModality(Qt.ApplicationModal)
             self.multimedia_selector.ok_pressed.connect(self.on_multimedia_ok_button_pressed)
             self.multimedia_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
             self.multimedia_selector.show()
         elif text == "Macro":
-            self.multimedia_selector = gui_parts.MacroSelector(self, 200, 300, i, last_selected) 
+            self.multimedia_selector = gui_parts.MacroSelector(self, 200, 300, i, last_selected)
             self.multimedia_selector.setWindowModality(Qt.ApplicationModal)
             self.multimedia_selector.ok_pressed.connect(self.on_macro_button_pressed)
             self.multimedia_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
@@ -627,7 +627,7 @@ class Window(QtWidgets.QWidget):
         self.close()
 
     def save_default(self, file_name):
-        with open(DATA_DIR+".default","w") as f:
+        with open(DATA_DIR+".default", "w") as f:
             f.write(file_name)
 
         logging.info(f"saving as {file_name} default")
@@ -694,4 +694,3 @@ class Window(QtWidgets.QWidget):
         self.bottom_buttons_widget.set_profile_label_text(self.current_profile)
 
         self.assign_data_bytes()
-

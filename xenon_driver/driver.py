@@ -18,7 +18,7 @@ class Driver:
         logging.info("driver ENTER")
         if self.dev is None:
             return
-        self.endpoint = self.dev[0][(self.interface,0)][0]
+        self.endpoint = self.dev[0][(self.interface, 0)][0]
         return self
 
     def __exit__(self, type, value, traceback):
