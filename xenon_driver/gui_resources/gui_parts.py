@@ -4,20 +4,20 @@ from pathlib import Path
 from functools import partial
 
 from PyQt5.QtWidgets import (
-        QWidget,
-        QGridLayout,
-        QVBoxLayout,
-        QHBoxLayout,
-        QColorDialog,
-        QSizePolicy,
-        QListWidget,
-        QListWidgetItem,
-        QLineEdit,
-        QCheckBox,
-        QSpacerItem,
-        QTextEdit,
-        QFrame
-) 
+    QWidget,
+    QGridLayout,
+    QVBoxLayout,
+    QHBoxLayout,
+    QColorDialog,
+    QSizePolicy,
+    QListWidget,
+    QListWidgetItem,
+    QLineEdit,
+    QCheckBox,
+    QSpacerItem,
+    QTextEdit,
+    QFrame
+)
 
 from PyQt5 import QtGui
 from PyQt5 import QtCore
@@ -64,6 +64,129 @@ class BottomButtons(QWidget):
         self.profile_label.setText("Profile: " + current_profile)
 
 
+class BindingsButtons(QWidget):
+    def __init__(self, parent, bindings_frame, bindings_buttons_names, bindings_options, settings_yml):
+        super().__init__()
+
+        self.parent = parent
+        self.bindings_v_layout = QVBoxLayout(bindings_frame)
+        self.bindings_menus = []
+        self.current_set_mode = 1
+
+        self.bindings_buttons_names = bindings_buttons_names
+        self.bindings_options = bindings_options
+        self.settings_yml = settings_yml
+
+        # create bindings buttons
+        bindings_list_layout = QGridLayout()
+
+        for i, name in enumerate(self.bindings_buttons_names):
+            start_mode = "mode1"
+            buttons_menu = custom_widgets.ButtonMenu(self.settings_yml["bindings_data"][start_mode][name]["name"])
+            for opt in self.bindings_options:
+                buttons_menu.add_option((opt, self.on_special_combo_box_item), i, opt)
+
+            label = custom_widgets.Label(str(i + 1) + ".", width=10)
+            bindings_list_layout.addWidget(label, i, 0)
+            bindings_list_layout.addWidget(buttons_menu, i, 1)
+            self.bindings_menus.append(buttons_menu)
+
+        hspacer = QSpacerItem(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        bindings_list_layout.addItem(hspacer, 10, 1)
+
+        # create three modes buttons
+        modes_layout = QHBoxLayout()
+
+        mode1 = custom_widgets.RadioButton("Mode1", color="#0000ff", bold="bold")
+        mode2 = custom_widgets.RadioButton("Mode2", color="#ff0000", bold="bold")
+        mode3 = custom_widgets.RadioButton("Mode3", color="#00ff00", bold="bold")
+
+        mode1.clicked.connect(self.on_mode_changed)
+        mode2.clicked.connect(self.on_mode_changed)
+        mode3.clicked.connect(self.on_mode_changed)
+
+        mode1.mode = 1
+        mode2.mode = 2
+        mode3.mode = 3
+
+        mode1.setChecked(True)
+
+        modes_layout.addWidget(mode1, )
+        modes_layout.addWidget(mode2, alignment=QtCore.Qt.AlignCenter)
+        modes_layout.addWidget(mode3, alignment=QtCore.Qt.AlignRight)
+
+        # add everything to layout
+        self.bindings_v_layout.addLayout(modes_layout)
+        self.bindings_v_layout.addLayout(bindings_list_layout)
+
+    def on_mode_changed(self):
+        radio_button = self.sender()
+        current_mode = radio_button.mode
+        self.current_set_mode = current_mode
+        mode = f"mode{current_mode}"
+        for i, name in enumerate(self.bindings_buttons_names):
+            self.bindings_menus[i].set_text(self.settings_yml["bindings_data"][mode][name]["name"])
+
+    def on_special_combo_box_item(self, i, text):
+        self.bindings_menus[i].set_text(text)
+        last_selected = self.bindings_menus[i].lastSelected
+
+        if text == "Keys combination":
+            self.key_catcher = KeyCombinationCatcher(self.parent, i, last_selected)
+            self.key_catcher.setWindowModality(QtCore.Qt.ApplicationModal)
+            self.key_catcher.ok_pressed.connect(self.on_keys_applied)
+            self.key_catcher.cancel_pressed.connect(self.on_cancel_button_pressed)
+            self.key_catcher.show()
+        elif text == "Snipe button":
+            self.snipe_dpi_selector = SnipeDpiSelector(self.parent, self.dpis_list, 0, i, last_selected)
+            self.snipe_dpi_selector.setWindowModality(QtCore.Qt.ApplicationModal)
+            self.snipe_dpi_selector.ok_pressed.connect(self.on_snipe_dpi_applied)
+            self.snipe_dpi_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
+            self.snipe_dpi_selector.show()
+        elif text == "Fire key":
+            self.fire_key_menu = FireKeyMenu(self.parent, i, last_selected)
+            self.fire_key_menu.setWindowModality(QtCore.Qt.ApplicationModal)
+            self.fire_key_menu.ok_pressed.connect(self.on_fire_key_applied)
+            self.fire_key_menu.cancel_pressed.connect(self.on_cancel_button_pressed)
+            self.fire_key_menu.show()
+        elif text == "Multimedia":
+            self.multimedia_selector = MultimediaKeysSelector(self.parent, 200, 300, self.multimedia_keys_dict, i, last_selected)
+            self.multimedia_selector.setWindowModality(QtCore.Qt.ApplicationModal)
+            self.multimedia_selector.ok_pressed.connect(self.on_multimedia_ok_button_pressed)
+            self.multimedia_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
+            self.multimedia_selector.show()
+        elif text == "Macro":
+            self.multimedia_selector = MacroSelector(self.parent, 200, 300, i, last_selected)
+            self.multimedia_selector.setWindowModality(QtCore.Qt.ApplicationModal)
+            self.multimedia_selector.ok_pressed.connect(self.on_macro_button_pressed)
+            self.multimedia_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
+            self.multimedia_selector.show()
+
+    def on_keys_applied(self, keys_catched):
+        key_catcher = self.sender()
+        self.bindings_menus[key_catcher.key_num].set_text(f"Keys combination - {keys_catched}")
+
+    def on_multimedia_ok_button_pressed(self, multimedia_name):
+        multimedia_selector = self.sender()
+        self.bindings_menus[multimedia_selector.key_num].set_text(f"Multimedia - {multimedia_name}")
+
+    def on_cancel_button_pressed(self):
+        some_pop_up_window = self.sender()
+        self.bindings_menus[some_pop_up_window.key_num].set_text(some_pop_up_window.previous)
+
+    def on_snipe_dpi_applied(self, dpi_value):
+        snipe_button = self.sender()
+        self.bindings_menus[snipe_button.key_num].set_text(f"Snipe button - {dpi_value}")
+
+    def on_macro_button_pressed(self, file_name):
+        some_pop_up_window = self.sender()
+        self.bindings_menus[some_pop_up_window.key_num].set_text(f"Macro - {file_name}")
+
+    def on_fire_key_applied(self, key, delay, times):
+        fire_key_button = self.sender()
+        self.bindings_menus[fire_key_button.key_num].set_text(f"Fire key - {key},{delay}ms,{times}")
+
+
 class LedChanger(QWidget):
     def __init__(self, data, current_led_mode):
         """
@@ -105,7 +228,7 @@ class LedChanger(QWidget):
             led_layout.addWidget(radio_button, row*2+1, 0)
             led_layout.addWidget(led_mode_label, row*2+1, 1)
             
-            is_cb = data[4] 
+            is_cb = data[4]
             is_color = data[5]
 
             combo_box = custom_widgets.ComboBox()
