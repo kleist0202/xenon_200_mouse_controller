@@ -2,9 +2,7 @@ from xenon_driver.configuration import MACROS_DIR
 from xenon_driver.gui_resources.gui_keys import GuiKeys
 from .options import Options
 
-import logging
-
-logger = logging.getLogger(__name__)
+from xenon_driver.logger import xenon_logger
 
 
 class DataHandler:
@@ -87,7 +85,7 @@ class DataHandler:
         def inner(func):
             def wrapper(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
                 if mask == Options.MACRO_MASK:
-                    start_byte = 2+nth*128 
+                    start_byte = 2+nth*128
                     self.bindings_data[start_byte] = macro.cycle_times
                     for i, index in enumerate(range(start_byte, start_byte+125)):
                         if i > 127-3:
@@ -102,17 +100,17 @@ class DataHandler:
         return inner
 
     def show_bytes(self):
-        logging.info("Showing Main")
+        xenon_logger.info("Showing Main")
         for i, b in enumerate(self.main_data):
-            logging.info(f"{i}, {hex(b)}")
+            xenon_logger.info(f"{i}, {hex(b)}")
 
-        logging.info("Showing Reset")
+        xenon_logger.info("Showing Reset")
         for i, b in enumerate(self.reset_data):
-            logging.info(f"{i}, {hex(b)}")
+            xenon_logger.info(f"{i}, {hex(b)}")
 
-        logging.info("Showing Bindings data")
+        xenon_logger.info("Showing Bindings data")
         for i, b in enumerate(self.bindings_data):
-            logging.info(f"{i}, {hex(b)}")
+            xenon_logger.info(f"{i}, {hex(b)}")
 
     def set_led(self, mode, option=0x00, r=0x00, g=0x00, b=0x00):
         """
@@ -545,14 +543,14 @@ class MacroTranslator:
         for _, key in enumerate(macro_text_list):
             elems = key.split(" ")
             if elems[0] == '':
-                logging.warning("No data in macro")
+                xenon_logger.warning("No data in macro")
 
                 while len(self.macro_bytes) < 125:
                     self.macro_bytes.append(0x00)
-                    logging.debug(f"macro_bytes length: {len(self.macro_bytes)}")
+                    xenon_logger.debug(f"macro_bytes length: {len(self.macro_bytes)}")
                 return
 
-            logging.debug(f"Elements: {elems}, Index:{real_index}")
+            xenon_logger.debug(f"Elements: {elems}, Index:{real_index}")
 
             if elems[0] == "Key":
                 if elems[3] == "Down":
@@ -596,5 +594,5 @@ class MacroTranslator:
         while len(self.macro_bytes) < 125:
             self.macro_bytes.append(0x00)
 
-        logger.debug(f"{[hex(x) for x in self.macro_bytes]}")
-        logger.debug(f"macro_bytes length: {len(self.macro_bytes)}")
+        xenon_logger.debug(f"{[hex(x) for x in self.macro_bytes]}")
+        xenon_logger.debug(f"macro_bytes length: {len(self.macro_bytes)}")

@@ -1,8 +1,6 @@
 import sys
 import yaml
 from functools import partial
-import logging
-from logging.config import dictConfig
 
 from PyQt5.QtCore import Qt
 from PyQt5 import QtWidgets
@@ -15,38 +13,7 @@ from xenon_driver.configuration import DATA_DIR, PROFILES_DIR
 from xenon_driver.gui_resources import custom_widgets
 from xenon_driver.gui_resources import gui_parts
 from xenon_driver.gui_resources import gui_keys
-
-
-dictConfig({
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'standard': {
-            'format': '%(asctime)s - [%(levelname)s] %(name)s [%(module)s.%(funcName)s:%(lineno)d]: %(message)s',
-            'datefmt': '%Y-%m-%d %H:%M:%S',
-        }
-    },
-    'handlers': {
-        'default': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard',
-        }
-    },
-    'loggers': {
-        '__main__': {
-            'handlers': ['default'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-    },
-    'root': {
-        'level': 'DEBUG',
-        'handlers': ['default']
-    },
-})
-
-logger = logging.getLogger(__name__)
+from xenon_driver.logger import xenon_logger
 
 
 class Window(QtWidgets.QWidget):
@@ -111,7 +78,7 @@ class Window(QtWidgets.QWidget):
         # button names lists
         self.top_buttons_names = ["Create macro", "Profiles", "Advanced"]
 
-        self.dpis_list = [ 
+        self.dpis_list = [
                 ("500" , Options.SNIPE_DPI500 ),
                 ("750" , Options.SNIPE_DPI750 ),
                 ("1000", Options.SNIPE_DPI1000),
@@ -126,7 +93,13 @@ class Window(QtWidgets.QWidget):
         ]
 
         # ---- bind buttons ----
-        self.bindings_options = ["Left button", "Right button", "Middle button", "Forward button", "Back button", "DPI Loop", "DPI +", "DPI -", "Three click", "Multimedia", "Fire key", "Keys combination", "Macro", "Mode switch", "Snipe button", "Disable"]
+        self.bindings_options = [
+                "Left button", "Right button", "Middle button",
+                "Forward button", "Back button",
+                "DPI Loop", "DPI +", "DPI -",
+                "Three click", "Multimedia", "Fire key", "Keys combination",
+                "Macro", "Mode switch", "Snipe button", "Disable"
+        ]
 
         self.bindings_buttons_names = ["left_button", "right_button", "middle_button", "forward_button", "back_button", "dpi_button", "mode_button", "fire_button"]
 
@@ -141,7 +114,7 @@ class Window(QtWidgets.QWidget):
                 self.data_handler.set_fire_button
         ]
 
-        # report rate 
+        # report rate
         self.rr_buttons_names = [
                 ("250",  Options.REPORT_RATE_250MHZ),
                 ("500",  Options.REPORT_RATE_500MHZ),
@@ -217,7 +190,7 @@ class Window(QtWidgets.QWidget):
 
         # ---- modes radio buttons ----
         self.modes_layout = self.create_modes_buttons()
-        
+
         # top buttons
         self.top_buttons_widget = gui_parts.TopButtons(self.top_buttons_frame, self.top_buttons_list)
 
@@ -347,7 +320,7 @@ class Window(QtWidgets.QWidget):
         if self.current_profile == "":
             custom_widgets.SaveProfileMessage()
             return
-        
+
         # led
         for rb, widgets in self.led_changer.mode_widgets.items():
             if rb.isChecked():
@@ -393,7 +366,7 @@ class Window(QtWidgets.QWidget):
                 key_comb_splited = bind_text.split(" ")
                 key_comb_text = key_comb_splited[3]
                 keys_list = key_comb_text.split("+")
-                logger.debug(keys_list)
+                xenon_logger.debug(keys_list)
 
                 whole_key_combination_data = [Options.KEY_COMBINATION_MASK, 0x00]
                 for key_catched in keys_list:
@@ -482,13 +455,14 @@ class Window(QtWidgets.QWidget):
 
         if self.driver is None:
             custom_widgets.DeviceNotConnectedMessage()
-            logging.error("Device not connected")
+            xenon_logger.error("Device not connected")
             return
 
         # send and save
         send_result = self.driver.send_data(self.data)
         if send_result is None:
             custom_widgets.DeviceNotConnectedMessage()
+            xenon_logger.error("Device not connected")
             return
 
         # save current profile as default
@@ -532,7 +506,7 @@ class Window(QtWidgets.QWidget):
         with open(PROFILES_DIR+file_name+".yml", "w") as f:
             yaml.dump(self.data.settings_yml, f)
 
-        logging.info("Data saved")
+        xenon_logger.info("Data saved")
 
     def on_special_combo_box_item(self, i, text):
         self.bindings_menus[i].set_text(text)
@@ -551,7 +525,7 @@ class Window(QtWidgets.QWidget):
             self.snipe_dpi_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
             self.snipe_dpi_selector.show()
         elif text == "Fire key":
-            self.fire_key_menu = gui_parts.FireKeyMenu(self, i, last_selected) 
+            self.fire_key_menu = gui_parts.FireKeyMenu(self, i, last_selected)
             self.fire_key_menu.setWindowModality(Qt.ApplicationModal)
             self.fire_key_menu.ok_pressed.connect(self.on_fire_key_applied)
             self.fire_key_menu.cancel_pressed.connect(self.on_cancel_button_pressed)
@@ -630,12 +604,12 @@ class Window(QtWidgets.QWidget):
         with open(DATA_DIR+".default", "w") as f:
             f.write(file_name)
 
-        logging.info(f"saving as {file_name} default")
+        xenon_logger.info(f"saving as {file_name} default")
 
     def read_default(self):
         with open(DATA_DIR+".default", "r") as f:
             current_default = f.readline().rstrip()
-            logging.info(f"default file is: {current_default}")
+            xenon_logger.info(f"default file is: {current_default}")
 
         return current_default
 
@@ -645,7 +619,7 @@ class Window(QtWidgets.QWidget):
         else:
             path = PROFILES_DIR+file_name+".yml"
 
-        logging.info(f"loading {file_name}")
+        xenon_logger.info(f"loading {file_name}")
         self.data.settings_yml = self.data.load_data(path)
 
         bindings_data = self.data.settings_yml["bindings_data"]
@@ -663,7 +637,7 @@ class Window(QtWidgets.QWidget):
         breath_color= main_data["breath"]["color"]
         neon_color = main_data["neon"]["color"]
         off_color = main_data["off"]["color"]
-        
+
         options_list = [steady_option, breath_option, neon_option, off_option]
         colors_list = [steady_color, breath_color, neon_color, off_color]
 
@@ -683,7 +657,7 @@ class Window(QtWidgets.QWidget):
 
         # load dpis
         starting_values = main_data["dpis"]
-        
+
         self.dpi_sliders_widget.set_sliders_values(starting_values)
 
         # dont change label if loaded settings are default

@@ -1,34 +1,31 @@
 import usb.core
 import usb.util
 
-import logging
-
-logger = logging.getLogger(__name__)
-
+from xenon_driver.logger import xenon_logger
 
 class Driver:
     def __init__(self, id_vendor, id_product, *, dry_run=False):
         self.dry_run = dry_run
         self.interface = 1
-        logging.info("driver INIT")
+        xenon_logger.info("driver INIT")
 
         self.dev = usb.core.find(idVendor=id_vendor, idProduct=id_product)
 
     def __enter__(self):
-        logging.info("driver ENTER")
+        xenon_logger.info("driver ENTER")
         if self.dev is None:
             return
         self.endpoint = self.dev[0][(self.interface, 0)][0]
         return self
 
     def __exit__(self, type, value, traceback):
-        logger.info("driver EXIT")
+        xenon_logger.info("driver EXIT")
         if type:
-            logger.debug(f"Driver: Logging exception {type, value, traceback}")
+            xenon_logger.debug(f"Driver: xenon_logger exception {type, value, traceback}")
 
     def send_data(self, data):
         if self.dry_run:
-            logger.info("Driver (dry run): data has not been sent")
+            xenon_logger.info("Driver (dry run): data has not been sent")
             return
 
         try:
@@ -36,9 +33,9 @@ class Driver:
         except usb.core.USBError:
             return
 
-        logger.debug("Driver: DETACHING KERNEL DRIVER")
+        xenon_logger.debug("Driver: DETACHING KERNEL DRIVER")
         usb.util.claim_interface(self.dev, self.interface)
-        logger.debug("Driver: CLAIMING INTERFACE")
+        xenon_logger.debug("Driver: CLAIMING INTERFACE")
 
         self.dev.set_interface_altsetting(interface=self.interface, alternate_setting=0)
 
@@ -69,11 +66,11 @@ class Driver:
                 timeout=1000
         )
         
-        logger.info("Driver: DATA HAS BEEN SENT")
+        xenon_logger.info("Driver: DATA HAS BEEN SENT")
 
         usb.util.release_interface(self.dev, 1)
-        logger.debug("Driver: RELEASING INTERFACE")
+        xenon_logger.debug("Driver: RELEASING INTERFACE")
         self.dev.attach_kernel_driver(1)
-        logger.debug("Driver: ATTACHING KERNEL DRIVER")
+        xenon_logger.debug("Driver: ATTACHING KERNEL DRIVER")
 
         return 0

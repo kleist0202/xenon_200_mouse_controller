@@ -3,10 +3,6 @@ import glob
 from pathlib import Path
 from functools import partial
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 from PyQt5.QtWidgets import (
         QWidget,
         QGridLayout,
@@ -30,6 +26,7 @@ from xenon_driver.configuration import PROFILES_DIR, MACROS_DIR
 from xenon_driver.gui_resources import custom_widgets
 from xenon_driver.gui_resources import gui_keys
 from xenon_driver.options import Options
+from xenon_driver.logger import xenon_logger
 
 
 class TopButtons(QWidget):
@@ -355,7 +352,7 @@ class KeyCombinationCatcher(custom_widgets.PopUpWindow):
             keys = [ self.keys_dict[k][0] for k in self.pressed_keys_list ]
         except KeyError:
             self.pressed_keys_list.pop()
-            logging.warning(f"No such key {pressed_key}")
+            xenon_logger.warning(f"No such key {pressed_key}")
             return
 
         modifiers_keys = [ self.keys_dict[k][0] for k in self.pressed_modifiers_list ]
@@ -483,7 +480,7 @@ class KeyCatcher(custom_widgets.PopUpWindow):
         try:
             key_text = self.keys_dict[pressed_key]
         except KeyError:
-            logging.warning(f"No such key {pressed_key}")
+            xenon_logger.warning(f"No such key {pressed_key}")
             return
         self.pressed_key = pressed_key
         self.keys_label.setText(key_text[0])
