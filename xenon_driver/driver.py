@@ -5,17 +5,19 @@ from xenon_driver.logger import xenon_logger
 
 class Driver:
     def __init__(self, id_vendor, id_product, *, dry_run=False):
-        self.dry_run = dry_run
-        self.interface = 1
         xenon_logger.info("driver INIT")
 
-        self.dev = usb.core.find(idVendor=id_vendor, idProduct=id_product)
+        self.id_vendor = id_vendor
+        self.id_product = id_product
+        self.dry_run = dry_run
+        self.interface = 1
 
     def __enter__(self):
         xenon_logger.info("driver ENTER")
-        if self.dev is None:
-            return
-        self.endpoint = self.dev[0][(self.interface, 0)][0]
+        # self.dev = usb.core.find(idVendor=self.id_vendor, idProduct=self.id_product)
+        # if self.dev is None:
+        #     return
+        # self.endpoint = self.dev[0][(self.interface, 0)][0]
         return self
 
     def __exit__(self, type, value, traceback):
@@ -23,14 +25,23 @@ class Driver:
         if type:
             xenon_logger.debug(f"Driver: xenon_logger exception {type, value, traceback}")
 
+    def connect(self):
+        self.dev = usb.core.find(idVendor=self.id_vendor, idProduct=self.id_product)
+        xenon_logger.info("trying to reconnect...")
+        if self.dev is None:
+            return
+        self.endpoint = self.dev[0][(self.interface, 0)][0]
+
     def send_data(self, data):
+        self.connect()
+
         if self.dry_run:
             xenon_logger.info("Driver (dry run): data has not been sent")
             return
 
         try:
             self.dev.detach_kernel_driver(self.interface)
-        except usb.core.USBError:
+        except (usb.core.USBError, AttributeError):
             return
 
         xenon_logger.debug("Driver: DETACHING KERNEL DRIVER")
@@ -65,7 +76,7 @@ class Driver:
                 data_or_wLength=data.bindings_data,
                 timeout=1000
         )
-        
+
         xenon_logger.info("Driver: DATA HAS BEEN SENT")
 
         usb.util.release_interface(self.dev, 1)
