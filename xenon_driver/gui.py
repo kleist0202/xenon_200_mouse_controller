@@ -25,9 +25,9 @@ class Window(QtWidgets.QWidget):
         default_file_name = self.read_default()
 
         if load_default:
-            self.data = Data(DATA_DIR+"default_settings.yml")
+            self.data = Data(DATA_DIR + "default_settings.yml")
         else:
-            self.data = Data(PROFILES_DIR+default_file_name+".yml")
+            self.data = Data(PROFILES_DIR + default_file_name + ".yml")
 
         self.current_profile = self.data.file_name
 
@@ -66,7 +66,7 @@ class Window(QtWidgets.QWidget):
         self.outer_frame_layout = QtWidgets.QVBoxLayout(self)
 
         # ----- frames ------
-        self.outer_frame = custom_widgets.Frame(parent=self, color="gray", style=QtWidgets.QFrame.StyledPanel|QtWidgets.QFrame.Sunken)
+        self.outer_frame = custom_widgets.Frame(parent=self, color="gray", style=QtWidgets.QFrame.StyledPanel | QtWidgets.QFrame.Sunken)
 
         self.top_buttons_frame = custom_widgets.Frame(parent=self, color="gray", style=QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken, height=50)
 
@@ -79,54 +79,54 @@ class Window(QtWidgets.QWidget):
         self.top_buttons_names = ["Create macro", "Profiles", "Advanced"]
 
         self.dpis_list = [
-                ("500" , Options.SNIPE_DPI500 ),
-                ("750" , Options.SNIPE_DPI750 ),
-                ("1000", Options.SNIPE_DPI1000),
-                ("1250", Options.SNIPE_DPI1250),
-                ("1375", Options.SNIPE_DPI1375),
-                ("1500", Options.SNIPE_DPI1500),
-                ("1750", Options.SNIPE_DPI1750),
-                ("2000", Options.SNIPE_DPI2000),
-                ("2500", Options.SNIPE_DPI2500),
-                ("2750", Options.SNIPE_DPI2750),
-                ("3200", Options.SNIPE_DPI3200)
+            ("500" , Options.SNIPE_DPI500 ),
+            ("750" , Options.SNIPE_DPI750 ),
+            ("1000", Options.SNIPE_DPI1000),
+            ("1250", Options.SNIPE_DPI1250),
+            ("1375", Options.SNIPE_DPI1375),
+            ("1500", Options.SNIPE_DPI1500),
+            ("1750", Options.SNIPE_DPI1750),
+            ("2000", Options.SNIPE_DPI2000),
+            ("2500", Options.SNIPE_DPI2500),
+            ("2750", Options.SNIPE_DPI2750),
+            ("3200", Options.SNIPE_DPI3200)
         ]
 
         # ---- bind buttons ----
         self.bindings_options = [
-                "Left button", "Right button", "Middle button",
-                "Forward button", "Back button",
-                "DPI Loop", "DPI +", "DPI -",
-                "Three click", "Multimedia", "Fire key", "Keys combination",
-                "Macro", "Mode switch", "Snipe button", "Disable"
+            "Left button", "Right button", "Middle button",
+            "Forward button", "Back button",
+            "DPI Loop", "DPI +", "DPI -",
+            "Three click", "Multimedia", "Fire key", "Keys combination",
+            "Macro", "Mode switch", "Snipe button", "Disable"
         ]
 
         self.bindings_buttons_names = ["left_button", "right_button", "middle_button", "forward_button", "back_button", "dpi_button", "mode_button", "fire_button"]
 
         self.bindings_functions = [
-                self.data_handler.set_left_button,
-                self.data_handler.set_right_button,
-                self.data_handler.set_middle_button,
-                self.data_handler.set_forward_button,
-                self.data_handler.set_back_button,
-                self.data_handler.set_dpi_button,
-                self.data_handler.set_mode_button,
-                self.data_handler.set_fire_button
+            self.data_handler.set_left_button,
+            self.data_handler.set_right_button,
+            self.data_handler.set_middle_button,
+            self.data_handler.set_forward_button,
+            self.data_handler.set_back_button,
+            self.data_handler.set_dpi_button,
+            self.data_handler.set_mode_button,
+            self.data_handler.set_fire_button
         ]
 
         # report rate
         self.rr_buttons_names = [
-                ("250",  Options.REPORT_RATE_250MHZ),
-                ("500",  Options.REPORT_RATE_500MHZ),
-                ("1000", Options.REPORT_RATE_1000MHZ)
+            ("250",  Options.REPORT_RATE_250MHZ),
+            ("500",  Options.REPORT_RATE_500MHZ),
+            ("1000", Options.REPORT_RATE_1000MHZ)
         ]
         # led
         self.led_mode_data = {
             "Steady": [
                 Options.STEADY,
                 "Brightness",
-                [ "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%" ],
-                [ 0x11, 0x21, 0x31, 0x41, 0x51, 0x61, 0x71, 0x81, 0x91, 0xa1 ],
+                ["10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"],
+                [0x11, 0x21, 0x31, 0x41, 0x51, 0x61, 0x71, 0x81, 0x91, 0xa1],
                 True, True,
                 self.current_steady_color,
                 self.current_steady_option
@@ -134,8 +134,8 @@ class Window(QtWidgets.QWidget):
             "Breath": [
                 Options.BREATH,
                 "Speed",
-                [ "1s", "4s", "6s", "8s" ],
-                [ 0x01, 0x11 ,0x51, 0xa1 ],
+                ["1s", "4s", "6s", "8s"],
+                [0x01, 0x11 ,0x51, 0xa1],
                 True, True,
                 self.current_breath_color,
                 self.current_breath_option
@@ -143,8 +143,8 @@ class Window(QtWidgets.QWidget):
             "Neon": [
                 Options.NEON,
                 "Speed",
-                [ "2s", "4s", "6s" ],
-                [ 0x11, 0x51 ,0xa1 ],
+                ["2s", "4s", "6s"],
+                [0x11, 0x51 ,0xa1],
                 True, False,
                 [0,0,0],
                 self.current_neon_option
@@ -176,16 +176,16 @@ class Window(QtWidgets.QWidget):
 
         restore_func = partial(self.load_profile, "default_settings.yml", True)
         self.bottom_buttons_list = [
-                ("Restore default", restore_func),
-                ("Apply", self.apply_changes),
-                ("Exit", self.kill_em_all)
+            ("Restore default", restore_func),
+            ("Apply", self.apply_changes),
+            ("Exit", self.kill_em_all)
         ]
 
         # ---- top buttons ----
         self.top_buttons_list = [
-                ("Create macro", self.on_create_macro_clicked),
-                ("Profiles", self.on_profile_button_clicked),
-                ("Advanced", self.on_advanced_clicked)
+            ("Create macro", self.on_create_macro_clicked),
+            ("Profiles", self.on_profile_button_clicked),
+            ("Advanced", self.on_advanced_clicked)
         ]
 
         # ---- modes radio buttons ----
@@ -251,22 +251,22 @@ class Window(QtWidgets.QWidget):
         bindings_list_layout = QtWidgets.QGridLayout()
 
         bindings_options = [
-                ("Left button", self.on_special_combo_box_item),
-                ("Right button", self.on_special_combo_box_item),
-                ("Middle button", self.on_special_combo_box_item),
-                ("Forward button", self.on_special_combo_box_item),
-                ("Back button", self.on_special_combo_box_item),
-                ("DPI Loop", self.on_special_combo_box_item),
-                ("DPI +", self.on_special_combo_box_item),
-                ("DPI -", self.on_special_combo_box_item),
-                ("Three click", self.on_special_combo_box_item),
-                ("Multimedia", self.on_special_combo_box_item),
-                ("Fire key", self.on_special_combo_box_item),
-                ("Keys combination", self.on_special_combo_box_item),
-                ("Macro", self.on_special_combo_box_item),
-                ("Mode switch", self.on_special_combo_box_item),
-                ("Snipe button", self.on_special_combo_box_item),
-                ("Disable", self.on_special_combo_box_item)
+            ("Left button", self.on_special_combo_box_item),
+            ("Right button", self.on_special_combo_box_item),
+            ("Middle button", self.on_special_combo_box_item),
+            ("Forward button", self.on_special_combo_box_item),
+            ("Back button", self.on_special_combo_box_item),
+            ("DPI Loop", self.on_special_combo_box_item),
+            ("DPI +", self.on_special_combo_box_item),
+            ("DPI -", self.on_special_combo_box_item),
+            ("Three click", self.on_special_combo_box_item),
+            ("Multimedia", self.on_special_combo_box_item),
+            ("Fire key", self.on_special_combo_box_item),
+            ("Keys combination", self.on_special_combo_box_item),
+            ("Macro", self.on_special_combo_box_item),
+            ("Mode switch", self.on_special_combo_box_item),
+            ("Snipe button", self.on_special_combo_box_item),
+            ("Disable", self.on_special_combo_box_item)
         ]
 
         for i, name in enumerate(self.bindings_buttons_names):
@@ -275,7 +275,7 @@ class Window(QtWidgets.QWidget):
             for opt in bindings_options:
                 buttons_menu.add_option(opt, i, opt[0])
 
-            label = custom_widgets.Label(str(i+1)+".", width=10)
+            label = custom_widgets.Label(str(i + 1) + ".", width=10)
             bindings_list_layout.addWidget(label, i, 0)
             bindings_list_layout.addWidget(buttons_menu, i, 1)
             self.bindings_menus.append(buttons_menu)
@@ -440,9 +440,9 @@ class Window(QtWidgets.QWidget):
         # apply dpis
         for i, dpi_slider in enumerate(self.dpi_sliders_widget.dpi_sliders_list):
             if self.dpi_sliders_widget.dpi_check_boxes_list[i].isChecked():
-                self.data_handler.set_dpi_values(i+1, dpi_slider.value())
+                self.data_handler.set_dpi_values(i + 1, dpi_slider.value())
             else:
-                self.data_handler.set_dpi_values(i+1, dpi_slider.value() | Options.BLOCKED_DPI_LEVEL_MASK)
+                self.data_handler.set_dpi_values(i + 1, dpi_slider.value() | Options.BLOCKED_DPI_LEVEL_MASK)
 
         dpi_levels = sum([dcb.isChecked() for dcb in self.dpi_sliders_widget.dpi_check_boxes_list])
         self.data_handler.set_dpi_levels(dpi_levels)
@@ -470,7 +470,6 @@ class Window(QtWidgets.QWidget):
 
         self.save_data(self.current_profile)
 
-
     def save_data(self, file_name):
         self.current_profile = file_name
 
@@ -488,7 +487,7 @@ class Window(QtWidgets.QWidget):
 
         # bindings
         for i, binding_menu in enumerate(self.bindings_menus):
-            self.data.settings_yml["bindings_data"]["mode"+str(self.current_set_mode)][self.bindings_buttons_names[i]]["name"] = binding_menu.text()
+            self.data.settings_yml["bindings_data"]["mode" + str(self.current_set_mode)][self.bindings_buttons_names[i]]["name"] = binding_menu.text()
 
         # rr
         self.data.settings_yml["main_data"]["rr"] = int(self.rr_widget.current_set_rr)
@@ -503,14 +502,14 @@ class Window(QtWidgets.QWidget):
         # set currrent profile label
         self.bottom_buttons_widget.set_profile_label_text(self.current_profile)
 
-        with open(PROFILES_DIR+file_name+".yml", "w") as f:
+        with open(PROFILES_DIR + file_name + ".yml", "w") as f:
             yaml.dump(self.data.settings_yml, f)
 
         xenon_logger.info("Data saved")
 
     def on_special_combo_box_item(self, i, text):
         self.bindings_menus[i].set_text(text)
-        last_selected =self.bindings_menus[i].lastSelected
+        last_selected = self.bindings_menus[i].lastSelected
 
         if text == "Keys combination":
             self.key_catcher = gui_parts.KeyCombinationCatcher(self, i, last_selected)
@@ -601,13 +600,13 @@ class Window(QtWidgets.QWidget):
         self.close()
 
     def save_default(self, file_name):
-        with open(DATA_DIR+".default", "w") as f:
+        with open(DATA_DIR + ".default", "w") as f:
             f.write(file_name)
 
         xenon_logger.info(f"saving as {file_name} default")
 
     def read_default(self):
-        with open(DATA_DIR+".default", "r") as f:
+        with open(DATA_DIR + ".default", "r") as f:
             current_default = f.readline().rstrip()
             xenon_logger.info(f"default file is: {current_default}")
 
@@ -615,9 +614,9 @@ class Window(QtWidgets.QWidget):
 
     def load_profile(self, file_name, default=False):
         if default:
-            path = DATA_DIR+file_name
+            path = DATA_DIR + file_name
         else:
-            path = PROFILES_DIR+file_name+".yml"
+            path = PROFILES_DIR + file_name + ".yml"
 
         xenon_logger.info(f"loading {file_name}")
         self.data.settings_yml = self.data.load_data(path)
@@ -634,7 +633,7 @@ class Window(QtWidgets.QWidget):
         off_option = main_data["off"]["option"]
 
         steady_color = main_data["steady"]["color"]
-        breath_color= main_data["breath"]["color"]
+        breath_color = main_data["breath"]["color"]
         neon_color = main_data["neon"]["color"]
         off_color = main_data["off"]["color"]
 
@@ -668,3 +667,11 @@ class Window(QtWidgets.QWidget):
         self.bottom_buttons_widget.set_profile_label_text(self.current_profile)
 
         self.assign_data_bytes()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_F11:
+            self.apply_changes()
+        elif event.key() == Qt.Key_Q:
+            self.kill_em_all()
+        elif event.key() == Qt.Key_F10:
+            self.load_profile("default_settings.yml")
