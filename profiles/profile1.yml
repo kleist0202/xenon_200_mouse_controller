@@ -13,7 +13,7 @@ bindings_data:
     middle_button:
       name: Middle button
     mode_button:
-      name: Mode button
+      name: Mode switch
     right_button:
       name: Right button
   mode2:
