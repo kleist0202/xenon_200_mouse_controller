@@ -195,7 +195,7 @@ class Window(QtWidgets.QWidget):
             self.bindings_frame,
             self.bindings_buttons_names,
             self.bindings_options,
-            self.data.settings_yml
+            self.data
         )
 
         # report rate buttons
@@ -490,6 +490,7 @@ class Window(QtWidgets.QWidget):
 
         xenon_logger.info(f"loading {file_name}")
         self.data.settings_yml = self.data.load_data(path)
+        xenon_logger.warning(self.data.settings_yml)
 
         bindings_data = self.data.settings_yml["bindings_data"]
 
@@ -515,10 +516,11 @@ class Window(QtWidgets.QWidget):
         self.led_changer.set_color(colors_list)
 
         # current mode
-        start_mode = "mode1"
+        # start_mode = "mode1"
+        current_set_mode = "mode" + str(self.bindings_buttons_widget.current_set_mode)
 
         for i, name in enumerate(self.bindings_buttons_names):
-            self.bindings_buttons_widget.bindings_menus[i].set_text(bindings_data[start_mode][name]["name"])
+            self.bindings_buttons_widget.bindings_menus[i].set_text(bindings_data[current_set_mode][name]["name"])
 
         # load report rate
         rr = main_data["rr"]

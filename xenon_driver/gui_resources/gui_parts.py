@@ -65,7 +65,7 @@ class BottomButtons(QWidget):
 
 
 class BindingsButtons(QWidget):
-    def __init__(self, parent, bindings_frame, bindings_buttons_names, bindings_options, settings_yml):
+    def __init__(self, parent, bindings_frame, bindings_buttons_names, bindings_options, data):
         super().__init__()
 
         self.parent = parent
@@ -75,7 +75,7 @@ class BindingsButtons(QWidget):
 
         self.bindings_buttons_names = bindings_buttons_names
         self.bindings_options = bindings_options
-        self.settings_yml = settings_yml
+        self.data = data
 
         # pop up windows
         self.key_catcher = None
@@ -88,7 +88,7 @@ class BindingsButtons(QWidget):
 
         for i, name in enumerate(self.bindings_buttons_names):
             start_mode = "mode1"
-            buttons_menu = custom_widgets.ButtonMenu(self.settings_yml["bindings_data"][start_mode][name]["name"])
+            buttons_menu = custom_widgets.ButtonMenu(self.data.settings_yml["bindings_data"][start_mode][name]["name"])
             for opt in self.bindings_options:
                 buttons_menu.add_option((opt, self.on_special_combo_box_item), i, opt)
 
@@ -131,7 +131,7 @@ class BindingsButtons(QWidget):
         self.current_set_mode = current_mode
         mode = f"mode{current_mode}"
         for i, name in enumerate(self.bindings_buttons_names):
-            self.bindings_menus[i].set_text(self.settings_yml["bindings_data"][mode][name]["name"])
+            self.bindings_menus[i].set_text(self.data.settings_yml["bindings_data"][mode][name]["name"])
 
     def on_special_combo_box_item(self, i, text):
         self.bindings_menus[i].set_text(text)
