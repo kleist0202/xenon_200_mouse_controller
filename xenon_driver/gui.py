@@ -50,10 +50,9 @@ class Window(QtWidgets.QWidget):
         # pop up windows
         self.advanced = None
         self.profiles_manager = None
-        self.key_catcher = None
-        self.snipe_dpi_selector = None
-        self.fire_key_menu = None
-        self.multimedia_selector = None
+        self.macro_creator = None
+
+        # macro translator
         self.mt = None
 
         # -------------------
@@ -186,7 +185,6 @@ class Window(QtWidgets.QWidget):
             ("Profiles", self.on_profile_button_clicked),
             ("Advanced", self.on_advanced_clicked)
         ]
-
 
         # top buttons
         self.top_buttons_widget = gui_parts.TopButtons(self.top_buttons_frame, self.top_buttons_list)
@@ -454,18 +452,20 @@ class Window(QtWidgets.QWidget):
         self.advanced.show()
 
     def kill_em_all(self):
-        if self.key_catcher is not None:
-            self.key_catcher.close()
         if self.profiles_manager is not None:
             self.profiles_manager.close()
         if self.advanced is not None:
             self.advanced.close()
-        if self.fire_key_menu is not None:
-            self.fire_key_menu.close()
-        if self.snipe_dpi_selector is not None:
-            self.snipe_dpi_selector.close()
-        if self.multimedia_selector is not None:
-            self.multimedia_selector.close()
+        if self.macro_creator is not None:
+            self.macro_creator.close()
+        if self.bindings_buttons_widget.key_catcher is not None:
+            self.bindings_buttons_widget.key_catcher.close()
+        if self.bindings_buttons_widget.fire_key_menu is not None:
+            self.bindings_buttons_widget.fire_key_menu.close()
+        if self.bindings_buttons_widget.snipe_dpi_selector is not None:
+            self.bindings_buttons_widget.snipe_dpi_selector.close()
+        if self.bindings_buttons_widget.multimedia_selector is not None:
+            self.bindings_buttons_widget.multimedia_selector.close()
 
         self.close()
 

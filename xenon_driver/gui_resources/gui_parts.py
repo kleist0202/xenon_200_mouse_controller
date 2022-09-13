@@ -77,6 +77,12 @@ class BindingsButtons(QWidget):
         self.bindings_options = bindings_options
         self.settings_yml = settings_yml
 
+        # pop up windows
+        self.key_catcher = None
+        self.snipe_dpi_selector = None
+        self.fire_key_menu = None
+        self.multimedia_selector = None
+
         # create bindings buttons
         bindings_list_layout = QGridLayout()
 
