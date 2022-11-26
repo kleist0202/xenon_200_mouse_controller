@@ -476,9 +476,15 @@ class Window(QtWidgets.QWidget):
         xenon_logger.info(f"saving as {file_name} default")
 
     def read_default(self):
-        with open(DATA_DIR + ".default", "r") as f:
-            current_default = f.readline().rstrip()
-            xenon_logger.info(f"default file is: {current_default}")
+        current_default = ""
+        try:
+            with open(DATA_DIR + ".default", "r") as f:
+                current_default = f.readline().rstrip()
+                xenon_logger.info(f"default file is: {current_default}")
+        except FileNotFoundError:
+            with open(DATA_DIR + ".default", "w") as f:
+                current_default = "profile1"
+                f.write(current_default)
 
         return current_default
 

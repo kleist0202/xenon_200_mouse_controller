@@ -19,3 +19,4 @@ profiles/*
 xenon_driver/__pycache__/
 xenon_driver/gui_resources/__pycache__/
 tests/__pycache__/
+data/.default
