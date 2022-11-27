@@ -1,7 +1,8 @@
 import subprocess
 import time
 
-class TestHelper():
+
+class TestHelper:
     def __init__(self, window):
         self.window = window
         self.data = window.data
@@ -14,20 +15,22 @@ class TestHelper():
                 self.click_on_screen(*coords, 1)
             else:
                 self.key_press(coords)
-        
+
         # return
 
         errors = []
 
         correct_bytes = self.data.load_bytes(correct_file)
-        for i, (gui_byte, correct_byte) in enumerate(zip(data_to_check, correct_bytes), start=1):
+        for i, (gui_byte, correct_byte) in enumerate(
+            zip(data_to_check, correct_bytes), start=1
+        ):
             if gui_byte == correct_byte:
                 continue
             else:
                 errors.append(i)
 
         print()
-        
+
         if errors:
             print("\033[91mTEST: correct bytes:\033[0m")
             for i, byte in enumerate(correct_bytes, start=1):
@@ -74,7 +77,9 @@ class TestHelper():
 
     def click_on_screen(self, x, y, mouseButton=1):
         time.sleep(0.25)
-        subprocess.run(["/usr/bin/xdotool", "mousemove", str(x), str(y), "click", str(mouseButton)])
+        subprocess.run(
+            ["/usr/bin/xdotool", "mousemove", str(x), str(y), "click", str(mouseButton)]
+        )
         time.sleep(0.25)
 
     def key_press(self, key):

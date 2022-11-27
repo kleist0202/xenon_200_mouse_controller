@@ -174,9 +174,9 @@ class Options:
     KEY_UP = 0x52
     KEY_NUMLOCK = 0x53
     KEY_NUMSLASH = 0x54
-    KEY_NUMSTAR= 0x55
-    KEY_NUMMINUS= 0x56
-    KEY_NUMPLUS= 0x57
+    KEY_NUMSTAR = 0x55
+    KEY_NUMMINUS = 0x56
+    KEY_NUMPLUS = 0x57
     KEY_DELETE = 0x58
     KEY_NUM1 = 0x59
     KEY_NUM2 = 0x5a

@@ -1,5 +1,5 @@
 import sys
-from context import xenon_driver 
+from context import xenon_driver
 from test_helper import TestHelper
 import threading
 
@@ -19,20 +19,28 @@ def main():
     apply = [1150, 800]
 
     coords_list = [
-            right_button, dpi_loop,
-            fire_key, combination,
-            press_a, press_b, press_shift, combination_ok,
-            apply
+        right_button,
+        dpi_loop,
+        fire_key,
+        combination,
+        press_a,
+        press_b,
+        press_shift,
+        combination_ok,
+        apply,
     ]
 
     # trnaslate coord when left monitor is on
     TestHelper.coords_translation(coords_list, left_monitor_size[0])
 
-    with xenon_driver.Driver(0x258a, 0x1007, dry_run=True) as driver:
+    with xenon_driver.Driver(0x258A, 0x1007, dry_run=True) as driver:
         w = xenon_driver.Window(driver, dry_run=True, load_default=True)
 
         th = TestHelper(w)
-        thr = threading.Thread(target=th.run_test, args=(coords_list, w.data.bindings_data,"./test_bindings_data"))
+        thr = threading.Thread(
+            target=th.run_test,
+            args=(coords_list, w.data.bindings_data, "./test_bindings_data"),
+        )
 
         w.show()
 
@@ -41,4 +49,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

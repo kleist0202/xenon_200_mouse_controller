@@ -13,11 +13,20 @@ class DataHandler:
         self.bindings_data = data.bindings_data
         self.settings_yml = data.settings_yml
 
-        self.basic_clicks = [Options.LEFT_BUTTON, Options.RIGHT_BUTTON, Options.MIDDLE_BUTTON]
+        self.basic_clicks = [
+            Options.LEFT_BUTTON,
+            Options.RIGHT_BUTTON,
+            Options.MIDDLE_BUTTON,
+        ]
 
         self.multimedia_keys = [
-                Options.PLAYPAUSE, Options.NEXT, Options.PREVIOUS, Options.STOP,
-                Options.MUTE, Options.VOLUMEUP, Options.VOLUMEDOWN
+            Options.PLAYPAUSE,
+            Options.NEXT,
+            Options.PREVIOUS,
+            Options.STOP,
+            Options.MUTE,
+            Options.VOLUMEUP,
+            Options.VOLUMEDOWN,
         ]
 
         self.dpi_loop_actions = [Options.DPI_LOOP, Options.DPI_PLUS, Options.DPI_MINUS]
@@ -26,11 +35,15 @@ class DataHandler:
         """
         Raise an error if entered arguments when setting bindings are invalid
         """
+
         def inner(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1):
             if mask is Options.CLICK_MASK:
                 speed = 0x00
                 times = 0x00
-                if action not in self.basic_clicks and action not in [Options.BACK_BUTTON, Options.FORWARD_BUTTON]:
+                if action not in self.basic_clicks and action not in [
+                    Options.BACK_BUTTON,
+                    Options.FORWARD_BUTTON,
+                ]:
                     raise Exception(f"Wrong action for {mask}")
 
             elif mask is Options.DPI_LOOP_MASK:
@@ -79,24 +92,34 @@ class DataHandler:
                 raise Exception(f"This mask is not allowed ({mask})!")
 
             func(self, mask, action, speed, times, mode)
+
         return inner
 
     def macro_number(nth):
         def inner(func):
-            def wrapper(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
+            def wrapper(
+                self,
+                mask,
+                action=Options.DEFAULT,
+                speed=0x00,
+                times=0x00,
+                mode=1,
+                macro=None,
+            ):
                 if mask == Options.MACRO_MASK:
-                    start_byte = 2+nth*128
+                    start_byte = 2 + nth * 128
                     self.bindings_data[start_byte] = macro.cycle_times
-                    for i, index in enumerate(range(start_byte, start_byte+125)):
-                        if i > 127-3:
+                    for i, index in enumerate(range(start_byte, start_byte + 125)):
+                        if i > 127 - 3:
                             break
-                        self.bindings_data[index+1] = macro.macro_bytes[i]
-                    action |= (nth+1 << 4)
+                        self.bindings_data[index + 1] = macro.macro_bytes[i]
+                    action |= nth + 1 << 4
                     action += macro.macro_mode
 
                 func(self, mask, action, speed, times, mode, macro)
 
             return wrapper
+
         return inner
 
     def show_bytes(self):
@@ -125,13 +148,13 @@ class DataHandler:
             0x11 -> 10%
             0x51 -> 50%
             0xa1 -> 100%
-            
+
             BREATH
             0x01 -> 1s
             0x11 -> 4s
             0x51 -> 6s
             0xa1 -> 8s
-            
+
             NEON
             0x11 -> 2s
             0x51 -> 4s
@@ -154,7 +177,11 @@ class DataHandler:
             Options.REPORT_RATE_1000MHZ
         """
 
-        if report_rate not in [Options.REPORT_RATE_250MHZ, Options.REPORT_RATE_500MHZ, Options.REPORT_RATE_1000MHZ]:
+        if report_rate not in [
+            Options.REPORT_RATE_250MHZ,
+            Options.REPORT_RATE_500MHZ,
+            Options.REPORT_RATE_1000MHZ,
+        ]:
             raise Exception("This option is not allowed (report rate)")
 
         self.main_data[8] = int(report_rate)
@@ -179,7 +206,7 @@ class DataHandler:
             0x00-0x0b -> dpi value
         """
 
-        if (value < 0x00 or value > 0x0b) and (value < 0x80 or value > 0x8b):
+        if (value < 0x00 or value > 0x0B) and (value < 0x80 or value > 0x8B):
             raise Exception("No such option (dpi value)")
 
         if level == 1:
@@ -206,7 +233,9 @@ class DataHandler:
 
     # @bindings_checker
     @macro_number(0)
-    def set_left_button(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
+    def set_left_button(
+        self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None
+    ):
         """
         Set action for left mouse button
 
@@ -247,7 +276,9 @@ class DataHandler:
 
     # @bindings_checker
     @macro_number(1)
-    def set_right_button(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
+    def set_right_button(
+        self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None
+    ):
         """
         Set action for right mouse button
 
@@ -285,7 +316,9 @@ class DataHandler:
 
     # @bindings_checker
     @macro_number(2)
-    def set_middle_button(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
+    def set_middle_button(
+        self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None
+    ):
         """
         Set action for middle mouse button
 
@@ -320,10 +353,12 @@ class DataHandler:
             self.bindings_data[1115] = action
             self.bindings_data[1116] = speed
             self.bindings_data[1117] = times
-    
+
     # @bindings_checker
     @macro_number(3)
-    def set_back_button(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
+    def set_back_button(
+        self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None
+    ):
         """
         Set action for back mouse button
 
@@ -361,7 +396,9 @@ class DataHandler:
 
     # @bindings_checker
     @macro_number(4)
-    def set_forward_button(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
+    def set_forward_button(
+        self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None
+    ):
         """
         Set action for forward mouse button
 
@@ -387,19 +424,21 @@ class DataHandler:
             self.bindings_data[1044] = speed
             self.bindings_data[1045] = times
         elif mode == 2:
-            self.bindings_data[1082] = 0x05 | mask 
+            self.bindings_data[1082] = 0x05 | mask
             self.bindings_data[1083] = action
             self.bindings_data[1084] = speed
             self.bindings_data[1085] = times
         elif mode == 3:
-            self.bindings_data[1122] = 0x05 | mask 
+            self.bindings_data[1122] = 0x05 | mask
             self.bindings_data[1123] = action
             self.bindings_data[1124] = speed
             self.bindings_data[1125] = times
 
     # @bindings_checker
     @macro_number(5)
-    def set_dpi_button(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
+    def set_dpi_button(
+        self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None
+    ):
         """
         Set action for dpi mouse button
 
@@ -434,10 +473,12 @@ class DataHandler:
             self.bindings_data[1127] = action
             self.bindings_data[1128] = speed
             self.bindings_data[1129] = times
-        
+
     # @bindings_checker
     @macro_number(7)
-    def set_fire_button(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
+    def set_fire_button(
+        self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None
+    ):
         """
         Set action for fire mouse button
 
@@ -448,7 +489,7 @@ class DataHandler:
             or
             Options.LCTRL/LSHIFT/LALT -> these keys
         speed:
-            5-255 -> for fire key 
+            5-255 -> for fire key
             or
             Options.KEY_*
         times:
@@ -475,7 +516,9 @@ class DataHandler:
 
     # @bindings_checker
     @macro_number(6)
-    def set_mode_button(self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None):
+    def set_mode_button(
+        self, mask, action=Options.DEFAULT, speed=0x00, times=0x00, mode=1, macro=None
+    ):
         """
         Set action for mode mouse button
 
@@ -527,7 +570,7 @@ class MacroTranslator:
         self.macro_bytes = []
 
         try:
-            with open(MACROS_DIR+macro_file_name, 'r') as file:
+            with open(MACROS_DIR + macro_file_name, "r") as file:
                 macro_text = file.readline()
         except FileNotFoundError:
             return
@@ -542,7 +585,7 @@ class MacroTranslator:
         real_index = 0
         for _, key in enumerate(macro_text_list):
             elems = key.split(" ")
-            if elems[0] == '':
+            if elems[0] == "":
                 xenon_logger.warning("No data in macro")
 
                 while len(self.macro_bytes) < 125:
@@ -567,29 +610,28 @@ class MacroTranslator:
             elif elems[1] == "button":
                 if elems[3] == "Down":
                     self.macro_bytes.append(0x01)
-                    mouse_button = GuiKeys.MOUSE_KEYS[elems[0]+" "+elems[1]]
+                    mouse_button = GuiKeys.MOUSE_KEYS[elems[0] + " " + elems[1]]
                     self.macro_bytes.append(mouse_button)
                 if elems[3] == "Up":
                     self.macro_bytes.append(0x81)
-                    mouse_button = GuiKeys.MOUSE_KEYS[elems[0]+" "+elems[1]]
+                    mouse_button = GuiKeys.MOUSE_KEYS[elems[0] + " " + elems[1]]
                     self.macro_bytes.append(mouse_button)
                 real_index += 2
             elif elems[0] == "Delay":
                 delay_value = int(elems[2])
                 if delay_value < 128:
-                    self.macro_bytes[real_index-2] += delay_value-1
+                    self.macro_bytes[real_index - 2] += delay_value - 1
                 else:
                     hundreds = int(delay_value / 100)
-                    rest = delay_value - hundreds*100
+                    rest = delay_value - hundreds * 100
                     if rest == 0:
                         rest = 1
-                    self.macro_bytes[real_index-2] += rest-1
+                    self.macro_bytes[real_index - 2] += rest - 1
                     if hundreds == 256:
                         hundreds = 0
                     self.macro_bytes.append(hundreds)
                     self.macro_bytes.append(0x03)
                     real_index += 2
-
 
         while len(self.macro_bytes) < 125:
             self.macro_bytes.append(0x00)

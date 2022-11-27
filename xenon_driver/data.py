@@ -11,9 +11,9 @@ class Data:
 
         self.settings_yml = None
         self.file_name = file_path
-        self.main_data = self.load_bytes(DATA_DIR+"main_data")
-        self.reset_data = self.load_bytes(DATA_DIR+"reset_data")
-        self.bindings_data = self.load_bytes(DATA_DIR+"bindings_data")
+        self.main_data = self.load_bytes(DATA_DIR + "main_data")
+        self.reset_data = self.load_bytes(DATA_DIR + "reset_data")
+        self.bindings_data = self.load_bytes(DATA_DIR + "bindings_data")
 
         if self.file_name is not None:
             self.settings_yml = self.load_data(file_path)
@@ -41,7 +41,7 @@ class Data:
 
         except FileNotFoundError:
             xenon_logger.info("Data: settings file not found: opening default settings")
-            with open(DATA_DIR+"default_settings.yml", "r") as file:
+            with open(DATA_DIR + "default_settings.yml", "r") as file:
                 default_settings = yaml.safe_load(file)
             self.file_name = ""
 

@@ -3,6 +3,7 @@ import usb.util
 
 from xenon_driver.logger import xenon_logger
 
+
 class Driver:
     def __init__(self, id_vendor, id_product, *, dry_run=False):
         xenon_logger.info("driver INIT")
@@ -23,7 +24,9 @@ class Driver:
     def __exit__(self, type, value, traceback):
         xenon_logger.info("driver EXIT")
         if type:
-            xenon_logger.debug(f"Driver: xenon_logger exception {type, value, traceback}")
+            xenon_logger.debug(
+                f"Driver: xenon_logger exception {type, value, traceback}"
+            )
 
     def connect(self):
         self.dev = usb.core.find(idVendor=self.id_vendor, idProduct=self.id_product)
@@ -51,30 +54,30 @@ class Driver:
         self.dev.set_interface_altsetting(interface=self.interface, alternate_setting=0)
 
         self.dev.ctrl_transfer(
-                bmRequestType=0x21,
-                bRequest=0x09,
-                wValue=0x0304,
-                wIndex=0x0001,
-                data_or_wLength=data.main_data,
-                timeout=1000
+            bmRequestType=0x21,
+            bRequest=0x09,
+            wValue=0x0304,
+            wIndex=0x0001,
+            data_or_wLength=data.main_data,
+            timeout=1000,
         )
 
         self.dev.ctrl_transfer(
-                bmRequestType=0x21,
-                bRequest=0x09,
-                wValue=0x0308,
-                wIndex=0x0001,
-                data_or_wLength=data.reset_data,
-                timeout=1000
+            bmRequestType=0x21,
+            bRequest=0x09,
+            wValue=0x0308,
+            wIndex=0x0001,
+            data_or_wLength=data.reset_data,
+            timeout=1000,
         )
 
         self.dev.ctrl_transfer(
-                bmRequestType=0x21,
-                bRequest=0x09,
-                wValue=0x0306,
-                wIndex=0x0001,
-                data_or_wLength=data.bindings_data,
-                timeout=1000
+            bmRequestType=0x21,
+            bRequest=0x09,
+            wValue=0x0306,
+            wIndex=0x0001,
+            data_or_wLength=data.bindings_data,
+            timeout=1000,
         )
 
         xenon_logger.info("Driver: DATA HAS BEEN SENT")

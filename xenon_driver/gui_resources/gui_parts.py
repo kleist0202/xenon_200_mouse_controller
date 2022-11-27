@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (
     QCheckBox,
     QSpacerItem,
     QTextEdit,
-    QFrame
+    QFrame,
 )
 
 from PyQt5 import QtGui
@@ -92,7 +92,9 @@ class BindingsButtons(QWidget):
 
         for i, name in enumerate(self.bindings_buttons_names):
             start_mode = "mode1"
-            buttons_menu = custom_widgets.ButtonMenu(self.data.settings_yml["bindings_data"][start_mode][name]["name"])
+            buttons_menu = custom_widgets.ButtonMenu(
+                self.data.settings_yml["bindings_data"][start_mode][name]["name"]
+            )
             for opt in self.bindings_options:
                 buttons_menu.add_option((opt, self.on_special_combo_box_item), i, opt)
 
@@ -121,7 +123,9 @@ class BindingsButtons(QWidget):
 
         mode1.setChecked(True)
 
-        modes_layout.addWidget(mode1, )
+        modes_layout.addWidget(
+            mode1,
+        )
         modes_layout.addWidget(mode2, alignment=QtCore.Qt.AlignCenter)
         modes_layout.addWidget(mode3, alignment=QtCore.Qt.AlignRight)
 
@@ -135,7 +139,9 @@ class BindingsButtons(QWidget):
         self.current_set_mode = current_mode
         mode = f"mode{current_mode}"
         for i, name in enumerate(self.bindings_buttons_names):
-            self.bindings_menus[i].set_text(self.data.settings_yml["bindings_data"][mode][name]["name"])
+            self.bindings_menus[i].set_text(
+                self.data.settings_yml["bindings_data"][mode][name]["name"]
+            )
 
     def on_special_combo_box_item(self, i, text):
         self.bindings_menus[i].set_text(text)
@@ -148,10 +154,14 @@ class BindingsButtons(QWidget):
             self.key_catcher.cancel_pressed.connect(self.on_cancel_button_pressed)
             self.key_catcher.show()
         elif text == "Snipe button":
-            self.snipe_dpi_selector = SnipeDpiSelector(self.parent, self.dpis_list, 0, i, last_selected)
+            self.snipe_dpi_selector = SnipeDpiSelector(
+                self.parent, self.dpis_list, 0, i, last_selected
+            )
             self.snipe_dpi_selector.setWindowModality(QtCore.Qt.ApplicationModal)
             self.snipe_dpi_selector.ok_pressed.connect(self.on_snipe_dpi_applied)
-            self.snipe_dpi_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
+            self.snipe_dpi_selector.cancel_pressed.connect(
+                self.on_cancel_button_pressed
+            )
             self.snipe_dpi_selector.show()
         elif text == "Fire key":
             self.fire_key_menu = FireKeyMenu(self.parent, i, last_selected)
@@ -160,33 +170,51 @@ class BindingsButtons(QWidget):
             self.fire_key_menu.cancel_pressed.connect(self.on_cancel_button_pressed)
             self.fire_key_menu.show()
         elif text == "Multimedia":
-            self.multimedia_selector = MultimediaKeysSelector(self.parent, 200, 300, self.multimedia_keys_dict, i, last_selected)
+            self.multimedia_selector = MultimediaKeysSelector(
+                self.parent, 200, 300, self.multimedia_keys_dict, i, last_selected
+            )
             self.multimedia_selector.setWindowModality(QtCore.Qt.ApplicationModal)
-            self.multimedia_selector.ok_pressed.connect(self.on_multimedia_ok_button_pressed)
-            self.multimedia_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
+            self.multimedia_selector.ok_pressed.connect(
+                self.on_multimedia_ok_button_pressed
+            )
+            self.multimedia_selector.cancel_pressed.connect(
+                self.on_cancel_button_pressed
+            )
             self.multimedia_selector.show()
         elif text == "Macro":
-            self.multimedia_selector = MacroSelector(self.parent, 200, 300, i, last_selected)
+            self.multimedia_selector = MacroSelector(
+                self.parent, 200, 300, i, last_selected
+            )
             self.multimedia_selector.setWindowModality(QtCore.Qt.ApplicationModal)
             self.multimedia_selector.ok_pressed.connect(self.on_macro_button_pressed)
-            self.multimedia_selector.cancel_pressed.connect(self.on_cancel_button_pressed)
+            self.multimedia_selector.cancel_pressed.connect(
+                self.on_cancel_button_pressed
+            )
             self.multimedia_selector.show()
 
     def on_keys_applied(self, keys_catched):
         key_catcher = self.sender()
-        self.bindings_menus[key_catcher.key_num].set_text(f"Keys combination - {keys_catched}")
+        self.bindings_menus[key_catcher.key_num].set_text(
+            f"Keys combination - {keys_catched}"
+        )
 
     def on_multimedia_ok_button_pressed(self, multimedia_name):
         multimedia_selector = self.sender()
-        self.bindings_menus[multimedia_selector.key_num].set_text(f"Multimedia - {multimedia_name}")
+        self.bindings_menus[multimedia_selector.key_num].set_text(
+            f"Multimedia - {multimedia_name}"
+        )
 
     def on_cancel_button_pressed(self):
         some_pop_up_window = self.sender()
-        self.bindings_menus[some_pop_up_window.key_num].set_text(some_pop_up_window.previous)
+        self.bindings_menus[some_pop_up_window.key_num].set_text(
+            some_pop_up_window.previous
+        )
 
     def on_snipe_dpi_applied(self, dpi_value):
         snipe_button = self.sender()
-        self.bindings_menus[snipe_button.key_num].set_text(f"Snipe button - {dpi_value}")
+        self.bindings_menus[snipe_button.key_num].set_text(
+            f"Snipe button - {dpi_value}"
+        )
 
     def on_macro_button_pressed(self, file_name):
         some_pop_up_window = self.sender()
@@ -194,7 +222,9 @@ class BindingsButtons(QWidget):
 
     def on_fire_key_applied(self, key, delay, times):
         fire_key_button = self.sender()
-        self.bindings_menus[fire_key_button.key_num].set_text(f"Fire key - {key},{delay}ms,{times}")
+        self.bindings_menus[fire_key_button.key_num].set_text(
+            f"Fire key - {key},{delay}ms,{times}"
+        )
 
 
 class LedChanger(QWidget):
@@ -216,7 +246,9 @@ class LedChanger(QWidget):
         super().__init__()
         self.data = data
         self.current_led_mode = current_led_mode
-        self.mode_widgets = {} # { radio_button : [combo_box, color_button, led_mode_label, color_label] }
+        self.mode_widgets = (
+            {}
+        )  # { radio_button : [combo_box, color_button, led_mode_label, color_label] }
 
         main_led_layout = QVBoxLayout()
         led_layout = QGridLayout()
@@ -227,17 +259,17 @@ class LedChanger(QWidget):
         for row, (mode_name, data) in enumerate(self.data.items(), start=1):
             led_mode_label = custom_widgets.Label(mode_name, width=40)
             led_preference_label = custom_widgets.Label(data[1], height=20)
-            
+
             radio_button = custom_widgets.RadioButton("")
             radio_button.setFixedHeight(20)
             radio_button.setFixedWidth(20)
             radio_button.mode = data[0]
             radio_button.clicked.connect(self.on_led_mode_changed)
             self.mode_widgets[radio_button] = []
-            
-            led_layout.addWidget(radio_button, row*2+1, 0)
-            led_layout.addWidget(led_mode_label, row*2+1, 1)
-            
+
+            led_layout.addWidget(radio_button, row * 2 + 1, 0)
+            led_layout.addWidget(led_mode_label, row * 2 + 1, 1)
+
             is_cb = data[4]
             is_color = data[5]
 
@@ -245,8 +277,8 @@ class LedChanger(QWidget):
             for text, value in zip(data[2], data[3]):
                 combo_box.addItem(str(text), value)
 
-            led_layout.addWidget(combo_box, row*2+1, 2)
-            led_layout.addWidget(led_preference_label, row*2+0, 2)
+            led_layout.addWidget(combo_box, row * 2 + 1, 2)
+            led_layout.addWidget(led_preference_label, row * 2 + 0, 2)
             combo_box.setCurrentIndex(combo_box.findData(data[7]))
 
             if not is_cb:
@@ -255,15 +287,17 @@ class LedChanger(QWidget):
             color_r, color_g, color_b = data[6]
             color_button = custom_widgets.ColorButton(color_r, color_g, color_b)
             color_label = custom_widgets.Label("Color")
-            led_layout.addWidget(color_button, row*2+1, 3)
-            led_layout.addWidget(color_label, row*2+0, 3, alignment=QtCore.Qt.AlignLeft)
+            led_layout.addWidget(color_button, row * 2 + 1, 3)
+            led_layout.addWidget(
+                color_label, row * 2 + 0, 3, alignment=QtCore.Qt.AlignLeft
+            )
             color_button.clicked.connect(self.color_picker_pop_up)
 
             if not is_color:
                 color_button.hide()
                 color_label.hide()
 
-            led_layout.setVerticalSpacing(0);
+            led_layout.setVerticalSpacing(0)
 
             if mode_name == self.current_led_mode:
                 radio_button.setChecked(True)
@@ -289,7 +323,7 @@ class LedChanger(QWidget):
             if widgets[2].text() == mode:
                 rb.setChecked(True)
                 rb.clicked.emit()
-    
+
     def set_options(self, options):
         for i, (_, widgets) in enumerate(self.mode_widgets.items()):
             item_index = widgets[0].findData(options[i])
@@ -302,15 +336,20 @@ class LedChanger(QWidget):
     def color_picker_pop_up(self):
         steady_color_button = self.sender()
         qcd = QColorDialog()
-        qcd.setCurrentColor(QtGui.QColor.fromRgb(*steady_color_button.get_button_color()))
+        qcd.setCurrentColor(
+            QtGui.QColor.fromRgb(*steady_color_button.get_button_color())
+        )
         qcd.exec_()
         color = qcd.selectedColor()
-        if (not color.isValid()): return
-        steady_color_button.set_button_color(color.toRgb().red(), color.toRgb().green(), color.toRgb().blue())
+        if not color.isValid():
+            return
+        steady_color_button.set_button_color(
+            color.toRgb().red(), color.toRgb().green(), color.toRgb().blue()
+        )
 
     def on_led_mode_changed(self):
         current_radio_button = self.sender()
-            
+
         for rb, widgets in self.mode_widgets.items():
             if rb != current_radio_button:
                 for widget in widgets:
@@ -323,7 +362,7 @@ class LedChanger(QWidget):
 class ReportRateButtons(QWidget):
     def __init__(self, rr_buttons_names, current_set_rr):
         super().__init__()
-        
+
         self.rr_buttons = []
         self.current_set_rr = current_set_rr
         self.rr_buttons_names = rr_buttons_names
@@ -337,7 +376,9 @@ class ReportRateButtons(QWidget):
         rr_layout.addItem(QSpacerItem(10, 0))
 
         for (name, _) in self.rr_buttons_names:
-            rr_button = custom_widgets.Button(name, func=self.report_rate_button_clicked)
+            rr_button = custom_widgets.Button(
+                name, func=self.report_rate_button_clicked
+            )
             rr_layout.addWidget(rr_button)
             self.rr_buttons.append(rr_button)
 
@@ -392,12 +433,12 @@ class DpiSliders(QWidget):
             dpi_slider.setMinimum(1)
             dpi_slider.setMaximum(len(dpi_values))
 
-            low_nibble = starting_values[i] & 0x0f
-            high_nibble = starting_values[i] & 0xf0
+            low_nibble = starting_values[i] & 0x0F
+            high_nibble = starting_values[i] & 0xF0
 
             dpi_slider.setValue(low_nibble)
 
-            func = partial(self.on_slider_value_changed, i+1)
+            func = partial(self.on_slider_value_changed, i + 1)
             dpi_slider.valueChanged.connect(func)
 
             dpi_check_box = QCheckBox()
@@ -405,27 +446,29 @@ class DpiSliders(QWidget):
             if high_nibble != Options.BLOCKED_DPI_LEVEL_MASK:
                 dpi_check_box.setChecked(True)
 
-            current_dpi_label = custom_widgets.Label(dpi_values[low_nibble-1][0])
+            current_dpi_label = custom_widgets.Label(dpi_values[low_nibble - 1][0])
 
             self.dpi_labels_list.append(current_dpi_label)
             self.dpi_sliders_list.append(dpi_slider)
             self.dpi_check_boxes_list.append(dpi_check_box)
 
-            dpi_sliders_layout.addWidget(dpi_check_box, i+1, 0)
-            dpi_sliders_layout.addWidget(dpi_slider, i+1, 1)
-            dpi_sliders_layout.addWidget(current_dpi_label, i+1, 2)
+            dpi_sliders_layout.addWidget(dpi_check_box, i + 1, 0)
+            dpi_sliders_layout.addWidget(dpi_slider, i + 1, 1)
+            dpi_sliders_layout.addWidget(current_dpi_label, i + 1, 2)
 
         # set main layout
         self.setLayout(dpi_sliders_layout)
 
     def on_slider_value_changed(self, num):
         current_dpi_slider = self.sender()
-        self.dpi_labels_list[num-1].setText(self.dpi_values[current_dpi_slider.value()-1][0])
+        self.dpi_labels_list[num - 1].setText(
+            self.dpi_values[current_dpi_slider.value() - 1][0]
+        )
 
     def set_sliders_values(self, starting_values):
         for i in range(4):
-            low_nibble = starting_values[i] & 0x0f
-            high_nibble = starting_values[i] & 0xf0
+            low_nibble = starting_values[i] & 0x0F
+            high_nibble = starting_values[i] & 0xF0
             self.dpi_sliders_list[i].setValue(low_nibble)
 
             if high_nibble != Options.BLOCKED_DPI_LEVEL_MASK:
@@ -451,16 +494,20 @@ class KeyCombinationCatcher(custom_widgets.PopUpWindow):
         self.keys_label = custom_widgets.Label("", height=20)
         self.keys_label.setStyleSheet("background: white;")
         self.keys_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.keys_label.setAlignment(QtCore.Qt.AlignCenter);
+        self.keys_label.setAlignment(QtCore.Qt.AlignCenter)
 
         ok_button = custom_widgets.Button("Ok", width=75, func=self.save_combination)
 
-        cancel_button = custom_widgets.Button("Cancel", width=75, func=self.cancel_button_pressed)
+        cancel_button = custom_widgets.Button(
+            "Cancel", width=75, func=self.cancel_button_pressed
+        )
 
         key_catcher_layout.addWidget(info_label)
         key_catcher_layout.addWidget(self.keys_label)
 
-        buttons_layouts.addWidget(cancel_button, alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom)
+        buttons_layouts.addWidget(
+            cancel_button, alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom
+        )
         buttons_layouts.addWidget(ok_button)
 
         key_catcher_layout.addLayout(buttons_layouts)
@@ -471,29 +518,41 @@ class KeyCombinationCatcher(custom_widgets.PopUpWindow):
 
     def keyPressEvent(self, e):
         pressed_key = e.key()
-        if pressed_key in [QtCore.Qt.Key_Control, QtCore.Qt.Key_Alt, QtCore.Qt.Key_Shift, QtCore.Qt.Key_Super_L]:
-            if not pressed_key in self.pressed_modifiers_list:
+        if pressed_key in [
+            QtCore.Qt.Key_Control,
+            QtCore.Qt.Key_Alt,
+            QtCore.Qt.Key_Shift,
+            QtCore.Qt.Key_Super_L,
+        ]:
+            if pressed_key not in self.pressed_modifiers_list:
                 self.pressed_modifiers_list.append(pressed_key)
 
         # if there are already two keys or key was already pressed
-        if not (len(self.pressed_keys_list) > 1 or (len(self.pressed_keys_list) == 1 and pressed_key == self.pressed_keys_list[0])):
+        if not (
+            len(self.pressed_keys_list) > 1 or (len(self.pressed_keys_list) == 1 and pressed_key == self.pressed_keys_list[0])
+        ):
 
-            if pressed_key not in [QtCore.Qt.Key_Control, QtCore.Qt.Key_Alt, QtCore.Qt.Key_Shift, QtCore.Qt.Key_Super_L]:
+            if pressed_key not in [
+                QtCore.Qt.Key_Control,
+                QtCore.Qt.Key_Alt,
+                QtCore.Qt.Key_Shift,
+                QtCore.Qt.Key_Super_L,
+            ]:
                 self.pressed_keys_list.append(pressed_key)
 
         try:
-            keys = [ self.keys_dict[k][0] for k in self.pressed_keys_list ]
+            keys = [self.keys_dict[k][0] for k in self.pressed_keys_list]
         except KeyError:
             self.pressed_keys_list.pop()
             xenon_logger.warning(f"No such key {pressed_key}")
             return
 
-        modifiers_keys = [ self.keys_dict[k][0] for k in self.pressed_modifiers_list ]
-        catcher_text = '+'.join(modifiers_keys)
+        modifiers_keys = [self.keys_dict[k][0] for k in self.pressed_modifiers_list]
+        catcher_text = "+".join(modifiers_keys)
         if len(keys) != 0 and len(modifiers_keys) != 0:
             catcher_text += "+"
 
-        catcher_text += '+'.join(keys)
+        catcher_text += "+".join(keys)
         self.keys_label.setText(catcher_text)
 
     def save_combination(self):
@@ -524,13 +583,13 @@ class SnipeDpiSelector(custom_widgets.PopUpWindow):
 
         selector_layout = QHBoxLayout()
         buttons_layout = QHBoxLayout()
-        
+
         self.snipe_dpi_slider = custom_widgets.JumpSlider(QtCore.Qt.Horizontal)
 
         self.snipe_dpi_slider.setMinimum(1)
         self.snipe_dpi_slider.setMaximum(len(self.dpi_values_dict))
 
-        self.snipe_dpi_slider.setValue(starting_value+1)
+        self.snipe_dpi_slider.setValue(starting_value + 1)
 
         self.snipe_dpi_slider.valueChanged.connect(self.on_slider_value_changed)
 
@@ -583,15 +642,19 @@ class KeyCatcher(custom_widgets.PopUpWindow):
         self.keys_label = custom_widgets.Label("", height=20)
         self.keys_label.setStyleSheet("background: white;")
         self.keys_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.keys_label.setAlignment(QtCore.Qt.AlignCenter);
+        self.keys_label.setAlignment(QtCore.Qt.AlignCenter)
 
         ok_button = custom_widgets.Button("Ok", width=75, func=self.save_key)
-        cancel_button = custom_widgets.Button("Cancel", width=75, func=self.cancel_button_pressed)
+        cancel_button = custom_widgets.Button(
+            "Cancel", width=75, func=self.cancel_button_pressed
+        )
 
         key_catcher_layout.addWidget(info_label)
         key_catcher_layout.addWidget(self.keys_label)
 
-        buttons_layouts.addWidget(cancel_button, alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom)
+        buttons_layouts.addWidget(
+            cancel_button, alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom
+        )
         buttons_layouts.addWidget(ok_button)
 
         key_catcher_layout.addLayout(buttons_layouts)
@@ -630,7 +693,7 @@ class FireKeyMenu(custom_widgets.PopUpWindow):
         self.keys_dict = gui_keys.GuiKeys.keys_dict
         self.previous = previous
         self.parent = parent
-        self.current_button = gui_keys.GuiKeys.MOUSE_KEYS["Left button"] 
+        self.current_button = gui_keys.GuiKeys.MOUSE_KEYS["Left button"]
         self.current_delay = 30
         self.current_times = 1
         self.fire_key_catcher = None
@@ -647,15 +710,19 @@ class FireKeyMenu(custom_widgets.PopUpWindow):
             ("Left button", self.left_button_chosen),
             ("Right button", self.right_button_chosen),
             ("Middle button", self.middle_button_chosen),
-            ("Keystroke", self.keystroke_chosen)
+            ("Keystroke", self.keystroke_chosen),
         ]
 
         self.action_menu_button = custom_widgets.ButtonMenu("Left button", menu_items)
 
-        delay_entry = custom_widgets.SpinBox(width=90, minv=self.current_delay, maxv=255)
+        delay_entry = custom_widgets.SpinBox(
+            width=90, minv=self.current_delay, maxv=255
+        )
         delay_entry.valueChanged.connect(self.on_delay_changed)
 
-        times_entry = custom_widgets.SpinBox(width=90, minv=self.current_times, maxv=255)
+        times_entry = custom_widgets.SpinBox(
+            width=90, minv=self.current_times, maxv=255
+        )
         times_entry.valueChanged.connect(self.on_times_changed)
 
         ok_button = custom_widgets.Button("Ok")
@@ -676,8 +743,8 @@ class FireKeyMenu(custom_widgets.PopUpWindow):
         buttons_layout.addWidget(cancel_button, alignment=QtCore.Qt.AlignBottom)
         buttons_layout.addWidget(ok_button, alignment=QtCore.Qt.AlignBottom)
 
-        actions_layout.setVerticalSpacing(0);
-            
+        actions_layout.setVerticalSpacing(0)
+
         fire_key_menu_layout.addLayout(actions_layout)
         fire_key_menu_layout.addLayout(buttons_layout)
 
@@ -693,7 +760,7 @@ class FireKeyMenu(custom_widgets.PopUpWindow):
         times = self.current_times
         self.ok_pressed.emit(key_text, delay, times)
         self.close()
-        
+
     def cancel_button_pressed(self):
         self.cancel_pressed.emit()
         self.close()
@@ -734,7 +801,7 @@ class MultimediaKeysSelector(custom_widgets.PopUpWindow):
         self.multimedia_keys_dict = multimedia_keys_dict
 
         self.key_num = key_num
-        self.previous = previous 
+        self.previous = previous
 
         self.list_widget = QListWidget()
         self.list_widget.setStyleSheet("background: white;")
@@ -760,7 +827,7 @@ class MultimediaKeysSelector(custom_widgets.PopUpWindow):
         # chosen_key = self.multimedia_keys_dict[chosen_name]
         self.ok_pressed.emit(chosen_name)
         self.close()
-        
+
     def cancel_button_pressed(self):
         self.cancel_pressed.emit()
         self.close()
@@ -777,13 +844,13 @@ class MacroSelector(custom_widgets.PopUpWindow):
         buttons_layout = QHBoxLayout()
 
         self.key_num = key_num
-        self.previous = previous 
+        self.previous = previous
 
         self.list_widget = QListWidget()
         self.list_widget.setStyleSheet("background: white;")
 
-        files_paths = glob.glob(MACROS_DIR+"*")
-        files = [ Path(file).stem for file in files_paths ]
+        files_paths = glob.glob(MACROS_DIR + "*")
+        files = [Path(file).stem for file in files_paths]
 
         for file in files:
             self.list_widget.addItem(QListWidgetItem(file))
@@ -804,7 +871,7 @@ class MacroSelector(custom_widgets.PopUpWindow):
         chosen_name = self.list_widget.currentItem().text()
         self.ok_pressed.emit(chosen_name)
         self.close()
-        
+
     def cancel_button_pressed(self):
         self.cancel_pressed.emit()
         self.close()
@@ -824,13 +891,15 @@ class ProfilesManager(custom_widgets.PopUpWindow):
         self.list_widget = QListWidget()
         self.list_widget.setStyleSheet("background: white;")
 
-        files_paths = glob.glob(path+"*" + ProfilesManager.PROFILES_EXTENSION)
-        files = [ Path(file).stem for file in files_paths ]
+        files_paths = glob.glob(path + "*" + ProfilesManager.PROFILES_EXTENSION)
+        files = [Path(file).stem for file in files_paths]
 
         for file in files:
             self.list_widget.addItem(QListWidgetItem(file))
 
-        current_profile_item = self.list_widget.findItems(starting_profile, QtCore.Qt.MatchExactly)
+        current_profile_item = self.list_widget.findItems(
+            starting_profile, QtCore.Qt.MatchExactly
+        )
         if current_profile_item:
             self.list_widget.setCurrentItem(current_profile_item[0])
 
@@ -840,7 +909,9 @@ class ProfilesManager(custom_widgets.PopUpWindow):
 
         cancel_button = custom_widgets.Button("Cancel", func=self.close)
         save_button = custom_widgets.Button("Save profile", func=self.save_and_close)
-        delete_button = custom_widgets.Button("Delete profile", func=self.delete_profile)
+        delete_button = custom_widgets.Button(
+            "Delete profile", func=self.delete_profile
+        )
         load_button = custom_widgets.Button("Load", func=self.load_and_close)
 
         buttons_layout = QVBoxLayout()
@@ -861,7 +932,7 @@ class ProfilesManager(custom_widgets.PopUpWindow):
 
     def save_and_close(self):
         saved_file_name = self.entry_widget.displayText()
-        if len(saved_file_name) > 50: 
+        if len(saved_file_name) > 50:
             custom_widgets.TooLongNameMessage()
             return
         if saved_file_name:
@@ -879,12 +950,12 @@ class ProfilesManager(custom_widgets.PopUpWindow):
         listItems = self.list_widget.selectedItems()
 
         if not listItems:
-            return        
+            return
 
         for item in listItems:
             self.list_widget.takeItem(self.list_widget.row(item))
 
-        os.remove(PROFILES_DIR + file_name + ProfilesManager.PROFILES_EXTENSION) 
+        os.remove(PROFILES_DIR + file_name + ProfilesManager.PROFILES_EXTENSION)
 
 
 class EnterDelay(custom_widgets.PopUpWindow):
@@ -893,7 +964,7 @@ class EnterDelay(custom_widgets.PopUpWindow):
 
     def __init__(self, parent, max_delay):
         super().__init__(parent, 300, 120)
-    
+
         self.keys_dict = gui_keys.GuiKeys.keys_dict
 
         delay_enter_layout = QVBoxLayout(self.outer_frame)
@@ -904,12 +975,16 @@ class EnterDelay(custom_widgets.PopUpWindow):
         self.delay_spin_box = custom_widgets.SpinBox(minv=1, maxv=max_delay)
 
         ok_button = custom_widgets.Button("Ok", width=75, func=self.save_delay)
-        cancel_button = custom_widgets.Button("Cancel", width=75, func=self.cancel_button_pressed)
+        cancel_button = custom_widgets.Button(
+            "Cancel", width=75, func=self.cancel_button_pressed
+        )
 
         delay_enter_layout.addWidget(info_label)
         delay_enter_layout.addWidget(self.delay_spin_box)
 
-        buttons_layouts.addWidget(cancel_button, alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom)
+        buttons_layouts.addWidget(
+            cancel_button, alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom
+        )
         buttons_layouts.addWidget(ok_button)
 
         delay_enter_layout.addLayout(buttons_layouts)
@@ -938,7 +1013,7 @@ class MacroCreator(custom_widgets.PopUpWindow):
         macro_list_layout = QVBoxLayout()
         key_list_layout = QVBoxLayout()
         options_layout = QVBoxLayout()
-        bottom_buttons_layout = QHBoxLayout() 
+        bottom_buttons_layout = QHBoxLayout()
 
         self.macro_list_widget = QListWidget()
         self.macro_list_widget.setFixedWidth(180)
@@ -954,8 +1029,12 @@ class MacroCreator(custom_widgets.PopUpWindow):
         self.key_list_widget.setFixedWidth(140)
         self.key_list_widget.setStyleSheet("background: white;")
 
-        self.until_key_released = custom_widgets.RadioButton("Cycle until the key released")
-        self.until_key_pressed = custom_widgets.RadioButton("Cycle until any key pressed")
+        self.until_key_released = custom_widgets.RadioButton(
+            "Cycle until the key released"
+        )
+        self.until_key_pressed = custom_widgets.RadioButton(
+            "Cycle until any key pressed"
+        )
         self.cycle_times = custom_widgets.RadioButton("Specified cycle times")
         self.cycle_times.setChecked(True)
 
@@ -966,14 +1045,14 @@ class MacroCreator(custom_widgets.PopUpWindow):
         self.cycle_entry = custom_widgets.SpinBox(width=90, minv=1, maxv=65535)
 
         insert_event_label = custom_widgets.Label("Insert event")
-        
+
         list_of_events = [
-                ("Key down", self.key_down_event),
-                ("Key up", self.key_up_event),
-                ("Delay", self.delay_event),
-                ("Left button", self.left_button_event),
-                ("Right button", self.right_button_event),
-                ("Middle button", self.middle_button_event)
+            ("Key down", self.key_down_event),
+            ("Key up", self.key_up_event),
+            ("Delay", self.delay_event),
+            ("Left button", self.left_button_event),
+            ("Right button", self.right_button_event),
+            ("Middle button", self.middle_button_event),
         ]
         self.events_menu = custom_widgets.ButtonMenu("Choose event", list_of_events)
         self.events_menu.setFixedWidth(150)
@@ -986,10 +1065,16 @@ class MacroCreator(custom_widgets.PopUpWindow):
         vspacer2 = QSpacerItem(10, 250)
 
         macro_list_save_button = custom_widgets.Button("Save", func=self.save_macro)
-        macro_list_delete_button = custom_widgets.Button("Delete", func=self.delete_macro)
+        macro_list_delete_button = custom_widgets.Button(
+            "Delete", func=self.delete_macro
+        )
 
-        key_list_modify_button = custom_widgets.Button("Modify", width=70, func=self.modify_item)
-        key_list_delete_button = custom_widgets.Button("Delete", width=70, func=self.delete_item)
+        key_list_modify_button = custom_widgets.Button(
+            "Modify", width=70, func=self.modify_item
+        )
+        key_list_delete_button = custom_widgets.Button(
+            "Delete", width=70, func=self.delete_item
+        )
 
         cancel_button = custom_widgets.Button("Cancel", func=self.close)
         hspacer = QSpacerItem(100, 10, QSizePolicy.Expanding, QSizePolicy.Minimum)
@@ -1033,7 +1118,7 @@ class MacroCreator(custom_widgets.PopUpWindow):
 
     def save_macro(self):
         saved_file_name = self.macro_name_line_edit.displayText()
-        if len(saved_file_name) > 50: 
+        if len(saved_file_name) > 50:
             custom_widgets.TooLongNameMessage()
             return
         if saved_file_name:
@@ -1041,7 +1126,7 @@ class MacroCreator(custom_widgets.PopUpWindow):
             start_stalking = False
             delay_items = 0
             current_index = 0
-            is_first_item_delay = True 
+            is_first_item_delay = True
 
             # merge delays
             while current_index < self.key_list_widget.count():
@@ -1053,7 +1138,9 @@ class MacroCreator(custom_widgets.PopUpWindow):
                         continue
                     delay_items += 1
                     start_stalking = True
-                    whole_delay += int(item.split("-")[1].replace(" ", "").replace("ms", ""))
+                    whole_delay += int(
+                        item.split("-")[1].replace(" ", "").replace("ms", "")
+                    )
                 else:
                     is_first_item_delay = False
                     if start_stalking:
@@ -1064,11 +1151,13 @@ class MacroCreator(custom_widgets.PopUpWindow):
 
                         full_text = f"Delay - {whole_delay} ms"
                         for j in range(delay_items):
-                            self.key_list_widget.takeItem(current_index-j-1)
+                            self.key_list_widget.takeItem(current_index - j - 1)
 
-                        self.key_list_widget.insertItem(current_index-delay_items, full_text)
+                        self.key_list_widget.insertItem(
+                            current_index - delay_items, full_text
+                        )
 
-                        current_index -= delay_items-1
+                        current_index -= delay_items - 1
                         start_stalking = False
                         whole_delay = 0
                         delay_items = 0
@@ -1085,15 +1174,15 @@ class MacroCreator(custom_widgets.PopUpWindow):
 
                 full_text = f"Delay - {whole_delay} ms"
                 for j in range(delay_items):
-                    self.key_list_widget.takeItem(current_index-j-1)
+                    self.key_list_widget.takeItem(current_index - j - 1)
 
-                self.key_list_widget.insertItem(current_index-delay_items, full_text)
+                self.key_list_widget.insertItem(current_index - delay_items, full_text)
                 whole_delay = 0
                 delay_items = 0
 
-            with open(MACROS_DIR+saved_file_name, "w") as file:
+            with open(MACROS_DIR + saved_file_name, "w") as file:
                 if self.cycle_times.isChecked():
-                    file.write(f"1,{self.cycle_entry.value()}:")  
+                    file.write(f"1,{self.cycle_entry.value()}:")
                 elif self.until_key_pressed.isChecked():
                     file.write("2,1:")
                 elif self.until_key_released.isChecked():
@@ -1101,15 +1190,14 @@ class MacroCreator(custom_widgets.PopUpWindow):
 
                 for i in range(self.key_list_widget.count()):
                     file.write(self.key_list_widget.item(i).text())
-                    if i != self.key_list_widget.count()-1:
+                    if i != self.key_list_widget.count() - 1:
                         file.write(",")
-        
 
         self.update_macros()
 
     def update_macros(self):
-        files_paths = glob.glob(MACROS_DIR+"*")
-        files = [ Path(file).stem for file in files_paths ]
+        files_paths = glob.glob(MACROS_DIR + "*")
+        files = [Path(file).stem for file in files_paths]
         self.macro_list_widget.clear()
 
         for file in files:
@@ -1127,7 +1215,7 @@ class MacroCreator(custom_widgets.PopUpWindow):
         self.macro_list_widget.takeItem(self.macro_list_widget.row(current_item))
 
         file_name = current_item.text()
-        os.remove(MACROS_DIR+ file_name) 
+        os.remove(MACROS_DIR + file_name)
 
         self.change_selected_macro()
 
@@ -1136,78 +1224,78 @@ class MacroCreator(custom_widgets.PopUpWindow):
         current_item = self.key_list_widget.currentItem()
         if current_item is None:
             index = 0
-            self.key_list_widget.insertItem(index+1, "Left button - Down")
-            self.key_list_widget.insertItem(index+2, "Left button - Up")
-            self.key_list_widget.setCurrentRow(index+1)
+            self.key_list_widget.insertItem(index + 1, "Left button - Down")
+            self.key_list_widget.insertItem(index + 2, "Left button - Up")
+            self.key_list_widget.setCurrentRow(index + 1)
         else:
             index = self.key_list_widget.row(current_item)
-            self.key_list_widget.insertItem(index+1, "Left button - Down")
-            self.key_list_widget.insertItem(index+2, "Left button - Up")
-            self.key_list_widget.setCurrentRow(index+2)
+            self.key_list_widget.insertItem(index + 1, "Left button - Down")
+            self.key_list_widget.insertItem(index + 2, "Left button - Up")
+            self.key_list_widget.setCurrentRow(index + 2)
 
     def right_button_event(self):
         self.events_menu.setText("Right button")
         current_item = self.key_list_widget.currentItem()
         if current_item is None:
             index = 0
-            self.key_list_widget.insertItem(index+1, "Right button - Down")
-            self.key_list_widget.insertItem(index+2, "Right button - Up")
-            self.key_list_widget.setCurrentRow(index+1)
+            self.key_list_widget.insertItem(index + 1, "Right button - Down")
+            self.key_list_widget.insertItem(index + 2, "Right button - Up")
+            self.key_list_widget.setCurrentRow(index + 1)
         else:
             index = self.key_list_widget.row(current_item)
-            self.key_list_widget.insertItem(index+1, "Right button - Down")
-            self.key_list_widget.insertItem(index+2, "Right button - Up")
-            self.key_list_widget.setCurrentRow(index+2)
+            self.key_list_widget.insertItem(index + 1, "Right button - Down")
+            self.key_list_widget.insertItem(index + 2, "Right button - Up")
+            self.key_list_widget.setCurrentRow(index + 2)
 
     def middle_button_event(self):
         self.events_menu.setText("Middle button")
         current_item = self.key_list_widget.currentItem()
         if current_item is None:
             index = 0
-            self.key_list_widget.insertItem(index+1, "Middle button - Down")
-            self.key_list_widget.insertItem(index+2, "Middle button - Up")
-            self.key_list_widget.setCurrentRow(index+1)
+            self.key_list_widget.insertItem(index + 1, "Middle button - Down")
+            self.key_list_widget.insertItem(index + 2, "Middle button - Up")
+            self.key_list_widget.setCurrentRow(index + 1)
         else:
             index = self.key_list_widget.row(current_item)
-            self.key_list_widget.insertItem(index+1, "Middle button - Down")
-            self.key_list_widget.insertItem(index+2, "Middle button - Up")
-            self.key_list_widget.setCurrentRow(index+2)
+            self.key_list_widget.insertItem(index + 1, "Middle button - Down")
+            self.key_list_widget.insertItem(index + 2, "Middle button - Up")
+            self.key_list_widget.setCurrentRow(index + 2)
 
     def key_down_apply(self, text_and_value):
         full_text = f"Key {text_and_value[0]} - Down"
         current_item = self.key_list_widget.currentItem()
         if current_item is None:
             index = 0
-            self.key_list_widget.insertItem(index+1, full_text)
+            self.key_list_widget.insertItem(index + 1, full_text)
             self.key_list_widget.setCurrentRow(index)
         else:
             index = self.key_list_widget.row(current_item)
-            self.key_list_widget.insertItem(index+1, full_text)
-            self.key_list_widget.setCurrentRow(index+1)
+            self.key_list_widget.insertItem(index + 1, full_text)
+            self.key_list_widget.setCurrentRow(index + 1)
 
     def key_up_apply(self, text_and_value):
         full_text = f"Key {text_and_value[0]} - Up"
         current_item = self.key_list_widget.currentItem()
         if current_item is None:
             index = 0
-            self.key_list_widget.insertItem(index+1, full_text)
+            self.key_list_widget.insertItem(index + 1, full_text)
             self.key_list_widget.setCurrentRow(index)
         else:
             index = self.key_list_widget.row(current_item)
-            self.key_list_widget.insertItem(index+1, full_text)
-            self.key_list_widget.setCurrentRow(index+1)
+            self.key_list_widget.insertItem(index + 1, full_text)
+            self.key_list_widget.setCurrentRow(index + 1)
 
     def delay_apply(self, delay):
         full_text = f"Delay - {delay} ms"
         current_item = self.key_list_widget.currentItem()
         if current_item is None:
             index = 0
-            self.key_list_widget.insertItem(index+1, full_text)
+            self.key_list_widget.insertItem(index + 1, full_text)
             self.key_list_widget.setCurrentRow(index)
         else:
             index = self.key_list_widget.row(current_item)
-            self.key_list_widget.insertItem(index+1, full_text)
-            self.key_list_widget.setCurrentRow(index+1)
+            self.key_list_widget.insertItem(index + 1, full_text)
+            self.key_list_widget.setCurrentRow(index + 1)
 
     def delay_event(self):
         self.events_menu.setText("Delay")
@@ -1233,7 +1321,7 @@ class MacroCreator(custom_widgets.PopUpWindow):
     def modify_item(self):
         current_item = self.key_list_widget.currentItem()
         if current_item is None:
-            return 
+            return
 
         if current_item.text().endswith("Down"):
             self.key_catcher_down = KeyCatcher(self)
@@ -1277,7 +1365,7 @@ class MacroCreator(custom_widgets.PopUpWindow):
             self.cycle_entry.setDisabled(False)
         else:
             self.cycle_entry.setDisabled(True)
-    
+
     def change_selected_macro(self):
         current_item = self.macro_list_widget.currentItem()
         if current_item is None:
@@ -1286,8 +1374,8 @@ class MacroCreator(custom_widgets.PopUpWindow):
 
         selected_macro_name = current_item.text()
         self.macro_name_line_edit.setText(selected_macro_name)
-        
-        with open(MACROS_DIR+selected_macro_name, "r") as file:
+
+        with open(MACROS_DIR + selected_macro_name, "r") as file:
             macro_text = file.readline()
 
         # clear whole list
@@ -1303,7 +1391,7 @@ class MacroCreator(custom_widgets.PopUpWindow):
         for key in macro_text_list:
             self.key_list_widget.addItem(key)
 
-        self.key_list_widget.setCurrentRow(self.key_list_widget.count()-1)
+        self.key_list_widget.setCurrentRow(self.key_list_widget.count() - 1)
 
 
 class Advanced(custom_widgets.PopUpWindow):
@@ -1341,8 +1429,8 @@ class Advanced(custom_widgets.PopUpWindow):
         self.bindings_data_string = self.data_to_string(self.data.bindings_data)
 
         self.te = QTextEdit()
-        font = QtGui.QFont("monospace");
-        self.te.setFont(font);
+        font = QtGui.QFont("monospace")
+        self.te.setFont(font)
         self.te.setStyleSheet("background: white")
         self.te.setText(self.main_data_string)
 
@@ -1398,9 +1486,9 @@ class Advanced(custom_widgets.PopUpWindow):
         reset_check = self.string_to_data(self.reset_data_string)
         bindings_check = self.string_to_data(self.bindings_data_string)
 
-        if (len(main_check) != self.main_data_len or
-                len(reset_check) != self.reset_data_len or
-                len(bindings_check) != self.bindings_data_len):
+        if (
+            len(main_check) != self.main_data_len or len(reset_check) != self.reset_data_len or len(bindings_check) != self.bindings_data_len
+        ):
             custom_widgets.DataNotAllowed()
             return
 
@@ -1418,7 +1506,7 @@ class Advanced(custom_widgets.PopUpWindow):
             if i % 16 == 0 and i != 0:
                 data_string += "\n"
             data_string += f"{byte:02x}"
-            if i != len(data)-1:
+            if i != len(data) - 1:
                 data_string += " "
         return data_string
 
@@ -1429,8 +1517,7 @@ class Advanced(custom_widgets.PopUpWindow):
             for byte in splitted:
                 if int(byte, 16) > 255 or int(byte, 16) < 0:
                     return []
-            data = list(map(lambda x:int(x,16), splitted))
+            data = list(map(lambda x: int(x, 16), splitted))
         except ValueError:
             return []
         return data
-

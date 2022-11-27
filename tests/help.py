@@ -10,7 +10,7 @@ def main():
         # driver.catch_interrupt()
         m = xenon_driver.Macro()
         m.macro_bytes = [
-                0x01, 0x04, 0x81, 0x04, 0x01, 0x06, 0x81, 0x06,
+            0x01, 0x04, 0x81, 0x04, 0x01, 0x06, 0x81, 0x06,
         ]
         # data_handler.set_right_button(xenon_driver.Options.MACRO_MASK, xenon_driver.Options.MACRO_ACTION, macro=m)
         # data_handler.set_fire_button(xenon_driver.Options.CLICK_MASK, xenon_driver.Options.LEFT_BUTTON)
