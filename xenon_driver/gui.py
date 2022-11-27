@@ -196,7 +196,9 @@ class Window(QtWidgets.QWidget):
             self.bindings_frame,
             self.bindings_buttons_names,
             self.bindings_options,
-            self.data
+            self.data,
+            self.dpis_list,
+            self.multimedia_keys_dict
         )
 
         # report rate buttons

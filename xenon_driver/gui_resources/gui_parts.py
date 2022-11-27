@@ -65,7 +65,9 @@ class BottomButtons(QWidget):
 
 
 class BindingsButtons(QWidget):
-    def __init__(self, parent, bindings_frame, bindings_buttons_names, bindings_options, data):
+    def __init__(
+        self, parent, bindings_frame, bindings_buttons_names, bindings_options, data, dpis_list, multimedia_keys_dict
+    ):
         super().__init__()
 
         self.parent = parent
@@ -76,6 +78,8 @@ class BindingsButtons(QWidget):
         self.bindings_buttons_names = bindings_buttons_names
         self.bindings_options = bindings_options
         self.data = data
+        self.dpis_list = dpis_list
+        self.multimedia_keys_dict = multimedia_keys_dict
 
         # pop up windows
         self.key_catcher = None
