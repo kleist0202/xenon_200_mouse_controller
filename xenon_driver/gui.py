@@ -2,6 +2,7 @@ import sys
 import yaml
 from functools import partial
 
+import PyQt5
 from PyQt5.QtCore import Qt
 from PyQt5 import QtWidgets
 
@@ -237,10 +238,11 @@ class Window(QtWidgets.QWidget):
         self.center()
 
     def center(self):
-        qt = self.frameGeometry()
-        cp = QtWidgets.QDesktopWidget().availableGeometry().center()
-        qt.moveCenter(cp)
-        self.move(qt.topLeft())
+        win_geom = self.frameGeometry()
+        screen = PyQt5.QtWidgets.QApplication.desktop().screenNumber(PyQt5.QtWidgets.QApplication.desktop().cursor().pos())
+        cp = PyQt5.QtWidgets.QApplication.desktop().screenGeometry(screen).center()
+        win_geom.moveCenter(cp)
+        self.move(win_geom.topLeft())
 
     def assign_data_bytes(self):
         if self.current_profile == "":
