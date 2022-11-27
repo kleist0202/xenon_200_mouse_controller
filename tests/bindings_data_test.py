@@ -8,10 +8,10 @@ def main():
 
     left_monitor_size = [1360, 768]
 
-    right_button = [750, 460]
+    right_button = [750, 450]
     dpi_loop = [750, 600]
     fire_key = [750, 725]
-    combination = [750, 975]
+    combination = [750, 605]
     press_a = "a"
     press_b = "b"
     press_shift = "Shift_L"

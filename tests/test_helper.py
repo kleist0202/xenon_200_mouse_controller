@@ -56,7 +56,7 @@ class TestHelper:
             print()
 
             print("\033[91m******************************************\033[0m")
-            print("\033[91mTEST: datas are different!\033[0m")
+            print("\033[91mTEST: data bytes are different!\033[0m")
             print(f"\033[91mTEST: test failed at bytes: {errors}!\033[0m")
             print("\033[91m******************************************\033[0m")
             print()
