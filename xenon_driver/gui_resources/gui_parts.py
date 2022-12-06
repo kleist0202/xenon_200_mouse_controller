@@ -1387,6 +1387,16 @@ class MacroCreator(custom_widgets.PopUpWindow):
 
         macro_full = macro_text.split(":")
         macro_text_list = macro_full[1].split(",")
+        begin_macro = macro_full[0].split(",")
+
+        if begin_macro[0] == "1":
+            self.cycle_times.setChecked(True)
+        elif begin_macro[0] == "2":
+            self.until_key_pressed.setChecked(True)
+        elif begin_macro[0] == "4":
+            self.until_key_released.setChecked(True)
+        else:
+            xenon_logger.warning("No such value for macro cycle option")
 
         for key in macro_text_list:
             self.key_list_widget.addItem(key)
