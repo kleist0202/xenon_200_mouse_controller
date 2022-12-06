@@ -51,7 +51,7 @@ class Driver:
         usb.util.claim_interface(self.dev, self.interface)
         xenon_logger.debug("Driver: CLAIMING INTERFACE")
 
-        self.dev.set_interface_altsetting(interface=self.interface, alternate_setting=0)
+        # self.dev.set_interface_altsetting(interface=self.interface, alternate_setting=0)
 
         self.dev.ctrl_transfer(
             bmRequestType=0x21,
