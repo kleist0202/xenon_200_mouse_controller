@@ -1,10 +1,10 @@
-.PHONY: gui gui_dry help
+.PHONY: gui gui_dry default
 
 gui:
 	python tests/gui_test.py
 gui_dry:
 	python tests/gui_test.py -d
-help:
+default:
 	python tests/help.py
 
 install:
