@@ -1132,6 +1132,9 @@ class MacroCreator(custom_widgets.PopUpWindow):
             # merge delays
             while current_index < self.key_list_widget.count():
                 item = self.key_list_widget.item(current_index).text()
+                if item == "":
+                    self.key_list_widget.takeItem(current_index)
+                    continue
 
                 if item.startswith("Delay"):
                     if is_first_item_delay:
@@ -1165,7 +1168,7 @@ class MacroCreator(custom_widgets.PopUpWindow):
                         continue
                 current_index += 1
 
-            # if there is a few delays at the end of list proceed one more time(ugly af)
+            # if there is a few delays at the end of list proceed one more time (ugly)
             if start_stalking:
                 start_stalking = False
 

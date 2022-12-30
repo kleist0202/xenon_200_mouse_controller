@@ -263,104 +263,112 @@ class Window(QtWidgets.QWidget):
                 self.data_handler.set_led(rb.mode, chosen_option, chosen_color[0], chosen_color[1], chosen_color[2])
 
         # bindings
-        for i, bind_menu in enumerate(self.bindings_buttons_widget.bindings_menus):
-            self.current_set_mode = self.bindings_buttons_widget.current_set_mode
-            bind_text = bind_menu.text()
-            if bind_text.startswith("Left button"):
-                setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.LEFT_BUTTON, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Right button"):
-                setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.RIGHT_BUTTON, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Middle button"):
-                setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.MIDDLE_BUTTON, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Forward button"):
-                setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.FORWARD_BUTTON, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Back button"):
-                setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.BACK_BUTTON, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("DPI Loop"):
-                setter = partial(self.bindings_functions[i], Options.DPI_LOOP_MASK, Options.DPI_LOOP, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("DPI +"):
-                setter = partial(self.bindings_functions[i], Options.DPI_LOOP_MASK, Options.DPI_PLUS, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("DPI -"):
-                setter = partial(self.bindings_functions[i], Options.DPI_LOOP_MASK, Options.DPI_MINUS, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Three click"):
-                setter = partial(self.bindings_functions[i], Options.THREE_CLICK_MASK, Options.THREE_CLICK_ACTION, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Keys combination"):
-                key_comb_splited = bind_text.split(" ")
-                key_comb_text = key_comb_splited[3]
-                keys_list = key_comb_text.split("+")
-                xenon_logger.debug(keys_list)
+        self.current_set_mode = self.bindings_buttons_widget.current_set_mode
+        for current_set_mode in range(1, 3 + 1):
+            mode = f"mode{current_set_mode}"
+            for i, bind_menu in enumerate(self.bindings_buttons_widget.bindings_menus):
+                name = self.bindings_buttons_names[i]
+                bind_text = self.data.settings_yml["bindings_data"][mode][name]["name"]
 
-                whole_key_combination_data = [Options.KEY_COMBINATION_MASK, 0x00]
-                for key_catched in keys_list:
+                # read data for other modes from file and for current mode - read from widget buttons
+                if self.current_set_mode == current_set_mode:
+                    bind_text = bind_menu.text()
+
+                if bind_text.startswith("Left button"):
+                    setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.LEFT_BUTTON, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Right button"):
+                    setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.RIGHT_BUTTON, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Middle button"):
+                    setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.MIDDLE_BUTTON, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Forward button"):
+                    setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.FORWARD_BUTTON, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Back button"):
+                    setter = partial(self.bindings_functions[i], Options.CLICK_MASK, Options.BACK_BUTTON, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("DPI Loop"):
+                    setter = partial(self.bindings_functions[i], Options.DPI_LOOP_MASK, Options.DPI_LOOP, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("DPI +"):
+                    setter = partial(self.bindings_functions[i], Options.DPI_LOOP_MASK, Options.DPI_PLUS, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("DPI -"):
+                    setter = partial(self.bindings_functions[i], Options.DPI_LOOP_MASK, Options.DPI_MINUS, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Three click"):
+                    setter = partial(self.bindings_functions[i], Options.THREE_CLICK_MASK, Options.THREE_CLICK_ACTION, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Keys combination"):
+                    key_comb_splited = bind_text.split(" ")
+                    key_comb_text = key_comb_splited[3]
+                    keys_list = key_comb_text.split("+")
+                    xenon_logger.debug(keys_list)
+
+                    whole_key_combination_data = [Options.KEY_COMBINATION_MASK, 0x00]
+                    for key_catched in keys_list:
+                        for _, tuple_val in gui_keys.GuiKeys.keys_dict.items():
+                            if key_catched in ("Ctrl", "Shift", "Alt", "Super") and key_catched == tuple_val[0]:
+                                whole_key_combination_data[1] |= tuple_val[1]
+                            elif key_catched == tuple_val[0]:
+                                whole_key_combination_data.append(tuple_val[1])
+
+                    setter = partial(self.bindings_functions[i], *whole_key_combination_data, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Multimedia"):
+                    bind_text_splitted = bind_text.split(" ")
+                    multimedia_name = bind_text_splitted[2]
+                    multimedia_value = self.multimedia_keys_dict[multimedia_name]
+                    setter = partial(self.bindings_functions[i], Options.KEY_COMBINATION_MASK, 0x00, multimedia_value, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Fire key"):
+                    bind_text_splitted = bind_text.split("-")
+                    fire_data = bind_text_splitted[1][1:]
+                    splitted_fire_data = fire_data.split(",")
+
+                    whole_fire_key = [Options.FIRE_MASK, 0, 0, 0]
+
+                    if splitted_fire_data[0] in gui_keys.GuiKeys.MOUSE_KEYS:
+                        whole_fire_key[1] = gui_keys.GuiKeys.MOUSE_KEYS[splitted_fire_data[0]]
+
                     for _, tuple_val in gui_keys.GuiKeys.keys_dict.items():
-                        if key_catched in ("Ctrl", "Shift", "Alt", "Super") and key_catched == tuple_val[0]:
-                            whole_key_combination_data[1] |= tuple_val[1]
-                        elif key_catched == tuple_val[0]:
-                            whole_key_combination_data.append(tuple_val[1])
+                        if splitted_fire_data[0] == tuple_val[0]:
+                            whole_fire_key[1] = tuple_val[1]
 
-                setter = partial(self.bindings_functions[i], *whole_key_combination_data, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Multimedia"):
-                bind_text_splitted = bind_text.split(" ")
-                multimedia_name = bind_text_splitted[2]
-                multimedia_value = self.multimedia_keys_dict[multimedia_name]
-                setter = partial(self.bindings_functions[i], Options.KEY_COMBINATION_MASK, 0x00, multimedia_value, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Fire key"):
-                bind_text_splitted = bind_text.split("-")
-                fire_data = bind_text_splitted[1][1:]
-                splitted_fire_data = fire_data.split(",")
+                    whole_fire_key[2] = int(splitted_fire_data[1][:-2])
+                    whole_fire_key[3] = int(splitted_fire_data[2])
 
-                whole_fire_key = [Options.FIRE_MASK, 0, 0, 0]
+                    setter = partial(self.bindings_functions[i], *whole_fire_key, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Mode switch"):
+                    setter = partial(self.bindings_functions[i], Options.MODE_MASK, Options.MODE_ACTION, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Snipe button"):
+                    snipe_dpi_text = bind_text.split(" ")
+                    current_dpi_text = snipe_dpi_text[3]
+                    actual_dpi_byte = 0
+                    for dpi_value in self.dpis_list:
+                        if dpi_value[0] == current_dpi_text:
+                            actual_dpi_byte = dpi_value[1]
+                    setter = partial(self.bindings_functions[i], Options.SNIPE_BUTTON_MASK, actual_dpi_byte, mode=current_set_mode)
+                    setter()
+                elif bind_text.startswith("Macro"):
+                    bind_text_splitted = bind_text.split(" ")
+                    macro_file_name = bind_text_splitted[2]
+                    self.mt = MacroTranslator(macro_file_name)
 
-                if splitted_fire_data[0] in gui_keys.GuiKeys.MOUSE_KEYS:
-                    whole_fire_key[1] = gui_keys.GuiKeys.MOUSE_KEYS[splitted_fire_data[0]]
+                    # macro doesn't exist anymore
+                    if not self.mt.macro_bytes:
+                        custom_widgets.MacroNotFound()
+                        return
 
-                for _, tuple_val in gui_keys.GuiKeys.keys_dict.items():
-                    if splitted_fire_data[0] == tuple_val[0]:
-                        whole_fire_key[1] = tuple_val[1]
-
-                whole_fire_key[2] = int(splitted_fire_data[1][:-2])
-                whole_fire_key[3] = int(splitted_fire_data[2])
-
-                setter = partial(self.bindings_functions[i], *whole_fire_key, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Mode switch"):
-                setter = partial(self.bindings_functions[i], Options.MODE_MASK, Options.MODE_ACTION, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Snipe button"):
-                snipe_dpi_text = bind_text.split(" ")
-                current_dpi_text = snipe_dpi_text[3]
-                actual_dpi_byte = 0
-                for dpi_value in self.dpis_list:
-                    if dpi_value[0] == current_dpi_text:
-                        actual_dpi_byte = dpi_value[1]
-                setter = partial(self.bindings_functions[i], Options.SNIPE_BUTTON_MASK, actual_dpi_byte, mode=self.current_set_mode)
-                setter()
-            elif bind_text.startswith("Macro"):
-                bind_text_splitted = bind_text.split(" ")
-                macro_file_name = bind_text_splitted[2]
-                self.mt = MacroTranslator(macro_file_name)
-
-                # macro doesn't exist anymore
-                if not self.mt.macro_bytes:
-                    custom_widgets.MacroNotFound()
-                    return
-
-                setter = partial(self.bindings_functions[i], Options.MACRO_MASK, 0x00, mode=self.current_set_mode, macro=self.mt)
-                setter()
-            elif bind_text.startswith("Disable"):
-                setter = partial(self.bindings_functions[i], Options.DISABLE_MASK, Options.DISABLE_ACTION, mode=self.current_set_mode)
-                setter()
+                    setter = partial(self.bindings_functions[i], Options.MACRO_MASK, 0x00, mode=current_set_mode, macro=self.mt)
+                    setter()
+                elif bind_text.startswith("Disable"):
+                    setter = partial(self.bindings_functions[i], Options.DISABLE_MASK, Options.DISABLE_ACTION, mode=current_set_mode)
+                    setter()
 
         # rr
         self.data_handler.set_report_rate(self.rr_widget.current_set_rr)
