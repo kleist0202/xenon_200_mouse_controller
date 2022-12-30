@@ -6,7 +6,7 @@ from xenon_driver.logger import xenon_logger
 
 
 class Data:
-    def __init__(self, file_path=None):
+    def __init__(self, file_path=None, *, main_load=None, reset_load=None, bindings_load=None):
         yaml.add_representer(int, self.hexint_presenter)
 
         self.settings_yml = None
@@ -17,6 +17,13 @@ class Data:
 
         if self.file_name is not None:
             self.settings_yml = self.load_data(file_path)
+
+        if main_load is not None:
+            self.main_data = main_load
+        if reset_load is not None:
+            self.reset_data = reset_load
+        if bindings_load is not None:
+            self.bindings_data = bindings_load
 
     @staticmethod
     def load_bytes(data_file_name):

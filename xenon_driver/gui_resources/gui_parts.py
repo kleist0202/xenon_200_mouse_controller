@@ -23,6 +23,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 from xenon_driver.configuration import PROFILES_DIR, MACROS_DIR
+from xenon_driver.data import Data
 from xenon_driver.gui_resources import custom_widgets
 from xenon_driver.gui_resources import gui_keys
 from xenon_driver.options import Options
@@ -1502,11 +1503,12 @@ class Advanced(custom_widgets.PopUpWindow):
             custom_widgets.DataNotAllowed()
             return
 
-        self.data.main_data = main_check
-        self.data.reset_data = reset_check
-        self.data.bindings_data = bindings_check
+        # self.data.main_data = main_check
+        # self.data.reset_data = reset_check
+        # self.data.bindings_data = bindings_check
+        self.advanced_data = Data(main_load=main_check, reset_load=reset_check, bindings_load=bindings_check)
 
-        if self.driver.send_data(self.data) is None:
+        if self.driver.send_data(self.advanced_data) is None:
             custom_widgets.DeviceNotConnectedMessage()
             return
 
