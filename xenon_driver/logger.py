@@ -53,7 +53,7 @@ logging.config.dictConfig({
         },
     },
     'root': {
-        'level': 'DEBUG',
+        'level': 'ERROR',
         'handlers': ['default']
     },
 })

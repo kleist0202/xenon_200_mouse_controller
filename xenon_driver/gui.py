@@ -59,7 +59,7 @@ class Window(QtWidgets.QWidget):
         # -------------------
         self.setStyleSheet("background-color: #444444;")
 
-        self.setFixedSize(680, 580)
+        #self.setFixedSize(750, 650)
         self.setWindowTitle("Driver")
 
         self.outer_frame_layout = QtWidgets.QVBoxLayout(self)
