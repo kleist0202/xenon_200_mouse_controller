@@ -1,3 +1,4 @@
+__version__ = 1.0
 from .driver import Driver
 from .data import Data
 from .data_handler import DataHandler, MacroTranslator

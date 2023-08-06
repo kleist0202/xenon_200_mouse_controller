@@ -1,0 +1,89 @@
+bindings_data:
+  mode1:
+    back_button:
+      name: Back button
+    dpi_button:
+      name: DPI Loop
+    fire_button:
+      name: Fire key - A,30ms,10
+    forward_button:
+      name: Forward button
+    left_button:
+      name: Left button
+    middle_button:
+      name: Middle button
+    mode_button:
+      name: Mode switch
+    right_button:
+      name: Right button
+  mode2:
+    back_button:
+      name: Back button
+    dpi_button:
+      name: DPI Loop
+    fire_button:
+      name: Keys combination - A
+    forward_button:
+      name: Forward button
+    left_button:
+      name: Left button
+    middle_button:
+      name: Middle button
+    mode_button:
+      name: Mode switch
+    right_button:
+      name: Right button
+  mode3:
+    back_button:
+      name: Back button
+    dpi_button:
+      name: DPI Loop
+    fire_button:
+      name: Keys combination - H
+    forward_button:
+      name: Forward button
+    left_button:
+      name: Left button
+    middle_button:
+      name: Middle button
+    mode_button:
+      name: Mode switch
+    right_button:
+      name: Right button
+main_data:
+  breath:
+    color:
+    - 0xfd
+    - 0xff
+    - 0xff
+    option: 0x1
+    value: 0x22
+  chosen: Breath
+  dirn: 0x0
+  dpis:
+  - 0x2
+  - 0x6
+  - 0x8
+  - 0xb
+  neon:
+    color:
+    - 0x0
+    - 0x0
+    - 0x0
+    option: 0xa1
+    value: 0x14
+  'off':
+    color:
+    - 0x0
+    - 0x0
+    - 0x0
+    option: null
+    value: 0x11
+  rr: 0x30
+  steady:
+    color:
+    - 0xff
+    - 0x0
+    - 0x4
+    option: 0x51
+    value: 0x18
